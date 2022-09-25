@@ -3,16 +3,16 @@ import "./style.css";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import RegisterInput from "../../component/inputs/registerInput/RegisterInput";
-import DotLoader from "react-spinners/DotLoader"
-import axios from 'axios'
-import {useDispatch} from 'react-redux'
-import Cookies from 'js-cookie'
-import {useNavigate} from 'react-router-dom'
+import DotLoader from "react-spinners/DotLoader";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 import DateOfBirthSelect from "../../component/inputs/registerInput/DateOfBirthSelect";
 import GenderSelect from "../../component/inputs/registerInput/GenderSelect";
 
 export default function Register() {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
   const registerInfos = {
     first_name: "",
     last_name: "",
@@ -27,39 +27,38 @@ export default function Register() {
 
   const [genderError, setGenderError] = useState("");
 
-  const [error,setError] = useState('')
-  const [success,setSuccess] = useState('')
-  const [loading,setLoading] = useState(false)
-  const dispatch = useDispatch()
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
-  const registerSubmit = async ()=>{
+  const registerSubmit = async () => {
     try {
-        const {data} = await axios.post('http://localhost:8000/register',{
-            first_name,
-            last_name,
-            email,
-            password,
-            bDay,
-            bMonth,
-            bYear,
-            gender
-        }
-        )
+      const { data } = await axios.post("http://localhost:8000/register", {
+        first_name,
+        last_name,
+        email,
+        password,
+        bDay,
+        bMonth,
+        bYear,
+        gender,
+      });
 
-        setError("")
-        setSuccess(data.message)
-        const {message, ...rest} = data
-        setTimeout(()=> {
-            dispatch({type:"LOGIN", payload:rest})
-            Cookies.set("user",JSON.stringify(rest))
-            navigate("/")
-        },2000)
+      setError("");
+      setSuccess(data.message);
+      const { message, ...rest } = data;
+      setTimeout(() => {
+        dispatch({ type: "LOGIN", payload: rest });
+        Cookies.set("user", JSON.stringify(rest));
+        navigate("/");
+      }, 2000);
     } catch (error) {
-        setLoading(false)
-        setSuccess("")
-        setError(error.response.data.message)
+      setLoading(false);
+      setSuccess("");
+      setError(error.response.data.message);
     }
-  }
+  };
 
   const [register, setRegister] = useState(registerInfos);
   const {
@@ -80,9 +79,9 @@ export default function Register() {
 
   const days = Array.from(new Array(getDays()), (val, index) => 1 + index);
 
-  const openLogin = ()=>{
-    navigate("/login")
-  }
+  const openLogin = () => {
+    navigate("/login");
+  };
 
   console.log(register);
   const handleRegisterChange = (e) => {
@@ -108,7 +107,7 @@ export default function Register() {
       .required("Password is required")
       .min(6, "Password must be minimum 6 Characters")
       .max(15, "Password must be minimum 15 Characters"),
-    });
+  });
 
   return (
     <div>
@@ -137,8 +136,8 @@ export default function Register() {
                   if (gender === "") {
                     setGenderError("You need to specify the gender");
                   } else {
-                    setGenderError("")
-                    registerSubmit()
+                    setGenderError("");
+                    registerSubmit();
                   }
                 }}
               >
@@ -169,32 +168,34 @@ export default function Register() {
                       onChange={handleRegisterChange}
                     />
                     <DateOfBirthSelect
-                    bDay={bDay}
-                    bMonth={bMonth}
-                    bYear = {bYear}
-                    handleRegisterChange = {handleRegisterChange}
-                    days = {days}
-                    years = {years}
-                    months = {months}
+                      bDay={bDay}
+                      bMonth={bMonth}
+                      bYear={bYear}
+                      handleRegisterChange={handleRegisterChange}
+                      days={days}
+                      years={years}
+                      months={months}
                     />
-                    
-                    <GenderSelect 
-                    genderError={genderError}
-                    handleRegisterChange = {handleRegisterChange}
+
+                    <GenderSelect
+                      genderError={genderError}
+                      handleRegisterChange={handleRegisterChange}
                     />
                     <button type="submit" className="blue_btn register_btn">
                       Sign In
                     </button>
                     <div className="reg_loading">
-                    <DotLoader color="#1876f2" loading={loading} size={30}/>
-                    {error && <div className="error_text">{error}</div>}
-                    {success && <div className="success_text">{success}</div>}
+                      <DotLoader color="#1876f2" loading={loading} size={30} />
+                      {error && <div className="error_text">{error}</div>}
+                      {success && <div className="success_text">{success}</div>}
                     </div>
                   </Form>
                 )}
               </Formik>
               <div className="sign_splitter"></div>
-              <button className="blue_btn open_login" onClick={openLogin}>Login</button>
+              <button className="blue_btn open_login" onClick={openLogin}>
+                Login
+              </button>
             </div>
           </div>
         </div>
