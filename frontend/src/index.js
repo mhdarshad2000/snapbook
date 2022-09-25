@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import './styles/icons/icons.css';
 import {BrowserRouter as Router} from 'react-router-dom'
 import {createStore} from "redux";
 import { Provider } from 'react-redux';
