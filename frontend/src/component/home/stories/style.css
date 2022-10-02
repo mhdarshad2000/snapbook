@@ -1,0 +1,67 @@
+.stories{
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(6,105px);
+    gap: 10px;
+    padding: 6px 0;
+}
+.create_story_card{
+    position: relative;
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #fff;
+    cursor: pointer;
+    box-shadow: 0 1px 2px var(--shadow-1);
+}
+.create_story_img{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    object-fit:cover;
+    filter: brightness(80%);
+}
+.plus_story{
+    position: absolute;
+    left: 52%;
+    top: 34%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-color);
+    cursor: pointer;
+    border: 4px solid #fff;
+}
+.story{
+    cursor: pointer;
+    position: relative;
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 1px 2px var(--shadow-1);
+}
+.story_img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.2s;
+}
+.story:hover .story_img{
+    transform: scale(1.1);
+}
+.story_profile_name{
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    bottom: 10px;
+    word-break: break-word;
+    color: black;
+    font-size: 14px;
+    padding-left: 10px;
+}

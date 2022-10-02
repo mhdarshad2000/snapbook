@@ -43,18 +43,17 @@ export default function Login() {
 
   const loginSubmit = async () => {
     try {
-      setLoading(true)
-      const { data } = await axios.post('http://localhost:8000/login', {
+      setLoading(true);
+      const { data } = await axios.post("http://localhost:8000/login", {
         email,
         password,
       });
-      setLoading(false)
+      setLoading(false);
       dispatch({ type: "LOGIN", payload: data });
       Cookies.set("user", JSON.stringify(data));
       navigate("/");
     } catch (error) {
       setLoading(false);
-      console.log(error)
       setError(error.response.data.message);
     }
   };
@@ -92,7 +91,6 @@ export default function Login() {
                       type="password"
                       name="password"
                       onChange={handleLoginChange}
-                      bottom
                     />
                     <button type="submit" className="blue_btn">
                       Log In
