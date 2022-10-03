@@ -11,12 +11,13 @@ import AdminLoggedInRouter from "./routes/AdminLoggedInRouter";
 import AdminNotLoggedInRouter from "./routes/AdminNotLoggedInRouter";
 import CreatePostPopup from "./component/home/createPostPopup/CreatePostPopup";
 import { useSelector } from "react-redux";
+import Activate from "./pages/home/Activate";
 
 function App() {
   const { user } = useSelector((state) => ({ ...state }));
   return (
     <div>
-      <CreatePostPopup user={user} />
+      {/* <CreatePostPopup user={user} /> */}
       <Routes>
         {/* <Route element={<AdminNotLoggedInRouter />}> */}
         <Route path="/admin" element={<AdminLogin />} exact />
@@ -30,6 +31,7 @@ function App() {
         </Route>
         <Route element={<LoggedInRouter />}>
           <Route path="/profile" element={<Profile />} exact />
+          <Route path="/activate/:token" element={<Activate />} exact />
           <Route path="/" element={<Home />} exact />
         </Route>
       </Routes>
