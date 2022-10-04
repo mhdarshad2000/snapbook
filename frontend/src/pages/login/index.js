@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DotLoader from "react-spinners/DotLoader";
-import axios from "axios";
+import { Axios } from "../../helpers/Axios";
 import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 import LoginInput from "../../component/inputs/loginInput/Index";
@@ -19,8 +19,6 @@ export default function Login() {
   const navigate = useNavigate();
   const [login, setLogin] = useState(loginInfos);
   const { email, password } = login;
-
-  console.log(login);
 
   const handleLoginChange = (e) => {
     const { name, value } = e.target;
@@ -44,7 +42,7 @@ export default function Login() {
   const loginSubmit = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.post("http://localhost:8000/login", {
+      const { data } = await Axios.post("/login", {
         email,
         password,
       });

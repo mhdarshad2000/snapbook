@@ -9,9 +9,7 @@ export default function AdminLogout() {
   const logout = () => {
     Cookies.set("admin", "");
     dispatch({ type: "ADMINLOGOUT" });
-    console.log(122);
     navigate("/admin");
-    console.log(122355);
   };
   return (
     <button

@@ -63,7 +63,7 @@ export default function ImagePreview({
                   ? "preview1"
                   : images.length === 2
                   ? "preview2"
-                  : images.length == 3
+                  : images.length === 3
                   ? "preview3"
                   : images.length === 4
                   ? "preview4"

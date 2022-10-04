@@ -4,7 +4,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import RegisterInput from "../../component/inputs/registerInput/RegisterInput";
 import DotLoader from "react-spinners/DotLoader";
-import axios from "axios";
+import { Axios } from "../../helpers/Axios";
 import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
@@ -34,7 +34,7 @@ export default function Register() {
 
   const registerSubmit = async () => {
     try {
-      const { data } = await axios.post("http://localhost:8000/register", {
+      const { data } = await Axios.post("http://localhost:8000/register", {
         first_name,
         last_name,
         email,
@@ -83,11 +83,9 @@ export default function Register() {
     navigate("/login");
   };
 
-  console.log(register);
   const handleRegisterChange = (e) => {
     const { name, value } = e.target;
     setRegister({ ...register, [name]: value });
-    console.log(register);
   };
   const registerValidation = Yup.object({
     first_name: Yup.string()

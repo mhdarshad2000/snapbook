@@ -1,7 +1,6 @@
 import React from 'react'
 
 export default function LeftLinks({img,text,notification}) {
-    console.log(img)
   return (
     <div className="left_link">
         <img src={`../../../left/${img}.png`} alt="" />

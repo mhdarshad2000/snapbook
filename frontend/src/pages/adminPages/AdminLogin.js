@@ -5,7 +5,7 @@ import { useState } from "react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import LoginInput from "../../component/inputs/loginInput/Index";
-import axios from "axios";
+import { Axios } from "../../helpers/Axios";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import DotLoader from "react-spinners/DotLoader";
@@ -21,7 +21,6 @@ export default function AdminLogin() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { username, password } = login;
-  console.log(login);
   const loginValidation = Yup.object({
     username: Yup.string()
       .min(6, "The username must be minimum 6 characters")
@@ -34,7 +33,7 @@ export default function AdminLogin() {
   const adminLoginSubmit = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.post("http://localhost:8000/admin", {
+      const { data } = await Axios.post("/admin", {
         username,
         password,
       });

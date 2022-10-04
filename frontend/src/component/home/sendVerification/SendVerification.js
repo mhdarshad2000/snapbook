@@ -1,14 +1,14 @@
 import "./style.css";
 import { useState } from "react";
-import axios from "axios";
+import { Axios } from "../../../helpers/Axios";
 
 export default function SendVerification({ user }) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const sendVerificationLink = async () => {
     try {
-      const { data } = await axios.post(
-        "http://localhost:8000/sendVerification",
+      const { data } = await Axios.post(
+        "/sendVerification",
         {},
         {
           headers: {
@@ -16,7 +16,7 @@ export default function SendVerification({ user }) {
           },
         }
       );
-      setSuccess(data.message)
+      setSuccess(data.message);
     } catch (error) {
       setError(error.response.data.message);
     }

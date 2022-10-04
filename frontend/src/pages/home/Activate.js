@@ -8,8 +8,8 @@ import Story from "../../component/home/stories/Story";
 import CreatePost from "../../component/home/createPosts/CreatePost";
 import ActivateForm from "./ActivateForm";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import Cookies from "js-cookie";
+import { Axios } from "../../helpers/Axios";
 
 export default function Activate() {
   const dispatch = useDispatch();
@@ -25,8 +25,8 @@ export default function Activate() {
   const activateAccount = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.post(
-        "http://localhost:8000/activate",
+      const { data } = await Axios.post(
+        "/activate",
         { token },
         {
           headers: {

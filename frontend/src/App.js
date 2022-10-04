@@ -12,27 +12,29 @@ import AdminNotLoggedInRouter from "./routes/AdminNotLoggedInRouter";
 import CreatePostPopup from "./component/home/createPostPopup/CreatePostPopup";
 import { useSelector } from "react-redux";
 import Activate from "./pages/home/Activate";
+import { useState } from "react";
 
 function App() {
   const { user } = useSelector((state) => ({ ...state }));
+  const [visible, setVisible] = useState(false);
   return (
     <div>
-      {/* <CreatePostPopup user={user} /> */}
+      {visible && <CreatePostPopup user={user} setVisible={setVisible} />}
       <Routes>
-        {/* <Route element={<AdminNotLoggedInRouter />}> */}
-        <Route path="/admin" element={<AdminLogin />} exact />
-        {/* </Route> */}
-        {/* <Route element={<AdminLoggedInRouter />}> */}
-        <Route path="/adminhome" element={<AdminHome />} exact />
-        {/* </Route> */}
+        <Route element={<AdminNotLoggedInRouter />}>
+          <Route path="/admin" element={<AdminLogin />} />
+        </Route>
+        <Route element={<AdminLoggedInRouter />}>
+          <Route path="/adminhome" element={<AdminHome />} />
+        </Route>
         <Route element={<NotLoggedInRoute />}>
-          <Route path="/login" element={<Login />} exact />
-          <Route path="/register" element={<Register />} exact />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Route>
         <Route element={<LoggedInRouter />}>
-          <Route path="/profile" element={<Profile />} exact />
-          <Route path="/activate/:token" element={<Activate />} exact />
-          <Route path="/" element={<Home />} exact />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/activate/:token" element={<Activate />} />
+          <Route path="/" element={<Home setVisible={setVisible} />} />
         </Route>
       </Routes>
     </div>
