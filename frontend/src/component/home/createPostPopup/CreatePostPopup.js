@@ -6,11 +6,15 @@ import AddToYourPost from "./AddToYourPost";
 import ImagePreview from "./ImagePreview";
 import useClickOutside from "../../../helpers/useClickOutSide";
 import { createPost } from "../../../functions/posts";
+import PostError from "./PostError";
+import dataURItoBlob from "../../../helpers/DataUriToBlob";
+import { uploadImages } from "../../../functions/uploadImages";
 
 export default function CreatePostPopup({ user, setVisible }) {
   const [text, setText] = useState("");
   const [showPreview, setShowPreview] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [images, setImages] = useState([]);
   const [background, setBackground] = useState("");
   const popup = useRef(null);
@@ -20,7 +24,7 @@ export default function CreatePostPopup({ user, setVisible }) {
   const postSubmit = async () => {
     if (background) {
       setLoading(true);
-      const res = await createPost(
+      const response = await createPost(
         null,
         background,
         text,
@@ -29,13 +33,71 @@ export default function CreatePostPopup({ user, setVisible }) {
         user.token
       );
       setLoading(false);
-      setBackground("");
-      setText("");
+      if (response === "ok") {
+        setBackground("");
+        setText("");
+        setVisible(false);
+      } else {
+        setError(response);
+      }
+    } else if (images && images.length) {
+      setLoading(true);
+      const postImages = images.map((image) => {
+        return dataURItoBlob(image);
+      });
+      const path = `${user.username}/post Images`;
+
+      let formData = new FormData(); //formdata object
+      formData.append("path", path); //append the values with key, value pair
+      postImages.forEach((image) => {
+        formData.append("file", image);
+      });
+      const response = await uploadImages(formData, path, user.token);
+      const res = await createPost(
+        null,
+        null,
+        text,
+        response,
+        user.id,
+        user.token
+      );
+
+      // Stoped here pls continue
+      setLoading(false);
+      if (res === "ok") {
+        setText("");
+        setImages("");
+        setVisible(false);
+      } else {
+        console.log(res);
+        setError(res);
+      }
+    } else if (text) {
+      setLoading(true);
+      const response = await createPost(
+        null,
+        null,
+        text,
+        null,
+        user.id,
+        user.token
+      );
+      setLoading(false);
+      if (response === "ok") {
+        setBackground("");
+        setText("");
+        setVisible(false);
+      } else {
+        setError(response);
+      }
+    } else {
+      console.log("nothing");
     }
   };
   return (
     <div className="blur">
       <div className="postBox" ref={popup}>
+        {error && <PostError error={error} setError={setError} />}
         <div className="box_header">
           <div
             className="small_circle"
@@ -80,26 +142,19 @@ export default function CreatePostPopup({ user, setVisible }) {
             images={images}
             setImages={setImages}
             setShowPreview={setShowPreview}
+            setError={setError}
           />
         )}
-        <AddToYourPost />
+        <AddToYourPost setShowPreview={setShowPreview} />
         <button
           className="post_submit"
           onClick={() => {
             postSubmit();
           }}
+          disabled={loading}
         >
-          Post
+          {loading ? <BounceLoader loading={loading} size={30} /> : "Post"}
         </button>
-        <div className="post_loader">
-          {loading && (
-            <BounceLoader
-              loading={loading}
-              color="var(--blue-color)"
-              size={30}
-            />
-          )}
-        </div>
       </div>
     </div>
   );

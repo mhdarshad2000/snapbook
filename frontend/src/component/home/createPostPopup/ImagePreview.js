@@ -7,12 +7,28 @@ export default function ImagePreview({
   setText,
   images,
   setImages,
-  setShowPreview
+  setShowPreview,
+  setError,
 }) {
   const imageInputRef = useRef(null);
   const handleImages = (e) => {
     let files = Array.from(e.target.files);
     files.forEach((img) => {
+      if (
+        img.type !== "image/jpg" &&
+        img.type !== "image/jpeg" &&
+        img.type !== "image/png" &&
+        img.type !== "image/gif" &&
+        img.type !== "image/webp"
+      ) {
+        setError(`${img.type} format is not supported`);
+        files = files.filter((item) => item.name !== img.name);
+        return;
+      } else if (img.size > 1024 * 1024 * 5) {
+        setError(`${img.size} is greater than 5mb`);
+        files = files.filter((item) => item.name !== img.name);
+        return;
+      }
       const reader = new FileReader();
       reader.readAsDataURL(img);
       reader.onload = (readerEvent) => {
@@ -26,11 +42,11 @@ export default function ImagePreview({
       <div className="add_pics_wrap">
         <input
           type="file"
+          accept="image/jpeg,image/png,image/gif,image/webp"
           multiple
           hidden
           ref={imageInputRef}
           onChange={handleImages}
-          setShowPreview={setShowPreview}
         />
         {images && images.length ? (
           <div className="add_pics_inside1 p0">

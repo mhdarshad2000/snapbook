@@ -19,11 +19,13 @@ export const createPost = async (
         user,
       },
       {
-        headers: `Bearer ${token}`,
+        headers: { Authorization: `Bearer ${token}` },
       }
     );
-    return data;
+    console.log(data)
+    return "ok";
   } catch (error) {
+    console.log(error);
     return error.response.data.message;
   }
 };
