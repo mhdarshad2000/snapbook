@@ -1,10 +1,15 @@
 import "./style.scss";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import Public from "../../svg/public";
 import Dots from "../../svg/dots";
+import ReactsPopup from "./ReactsPopup";
+import CreateComment from "./CreateComment";
+import PostMenu from "./PostMenu";
 
-export default function Post({ post }) {
+export default function Post({ post,user }) {
+  const [visible, setVisible] = useState(false);
   return (
     <div className="post">
       <div className="post_header">
@@ -85,7 +90,39 @@ export default function Post({ post }) {
           <div className="share_count">1 share</div>
         </div>
       </div>
-      {/* video 5 (04.05 minutes) */}
+      <div className="post_actions">
+        <ReactsPopup visible={visible} setVisible={setVisible} />
+        <div
+          className="post_action hover1"
+          onMouseOver={() => {
+            setTimeout(()=>{
+              setVisible(true)
+            },500)
+          }}
+          onMouseLeave={() => {
+            setTimeout(()=>{
+              setVisible(false)
+            },500)
+          }}
+        >
+          <i className="like_icon"></i>
+          <span>Like</span>
+        </div>
+        <div className="post_action hover1">
+          <i className="comment_icon"></i>
+          <span>Comment</span>
+        </div>
+        <div className="post_action hover1">
+          <i className="share_icon"></i>
+          <span>Share</span>
+        </div>
+      </div>
+      <div className="comments_wrap">
+        <div className="comments_order">
+          <CreateComment user={user} />
+        </div>
+      </div>
+      <PostMenu />
     </div>
   );
 }

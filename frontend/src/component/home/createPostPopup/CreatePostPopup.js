@@ -45,7 +45,7 @@ export default function CreatePostPopup({ user, setVisible }) {
       const postImages = images.map((image) => {
         return dataURItoBlob(image);
       });
-      const path = `${user.username}/post Images`;
+      const path = `${user.username}/post_images`;
 
       let formData = new FormData(); //formdata object
       formData.append("path", path); //append the values with key, value pair

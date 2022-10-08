@@ -21,6 +21,23 @@ exports.uploadImages = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+exports.listImages = async (req, res) => {
+  try {
+    const { path, sort, max } = req.body;
+    cloudinary.v2.search
+      .expression(path)
+      .sort_by("public_id", `${sort}`)
+      .max_results(max)
+      .execute()
+      .then((result)=>{
+        res.json(result)
+      }).catch((err)=>{
+        console.log(err.error.message)
+      })
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 const uploadToCloudinary = async (file, path) => {
   return new Promise((resolve) => {

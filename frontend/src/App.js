@@ -15,37 +15,12 @@ import Activate from "./pages/home/Activate";
 import { useReducer, useState } from "react";
 import { Axios } from "./helpers/Axios";
 import { useEffect } from "react";
-
-function reducer(state, action) {
-  switch (action.type) {
-    case "POST_REQUEST":
-      return {
-        ...state,
-        loading: true,
-        error: "",
-      };
-    case "POST_SUCCESS":
-      return {
-        ...state,
-        loading: false,
-        posts: action.payload,
-        error: "",
-      };
-    case "POST_ERROR":
-      return {
-        ...state,
-        loading: false,
-        error: action.payload,
-      };
-    default:
-      return state;
-  }
-}
+import { postsReducer } from "./functions/Reducers";
 
 function App() {
   const { user } = useSelector((state) => ({ ...state }));
   const [visible, setVisible] = useState(false);
-  const [{ loading, error, posts }, dispatch] = useReducer(reducer, {
+  const [{ loading, error, posts }, dispatch] = useReducer(postsReducer, {
     loading: false,
     error: "",
     posts: [],
@@ -82,7 +57,8 @@ function App() {
           <Route path="/register" element={<Register />} />
         </Route>
         <Route element={<LoggedInRouter />}>
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<Profile setVisible={setVisible} />} />
+          <Route path="/profile/:username" element={<Profile setVisible={setVisible} />} />
           <Route path="/activate/:token" element={<Activate />} />
           <Route
             path="/"
