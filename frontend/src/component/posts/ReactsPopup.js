@@ -1,4 +1,5 @@
-import { useState } from "react";
+import {reactPost} from "../../functions/posts"
+import {useSelector} from "react-redux"
 
 const reactsArray = [
   {
@@ -26,25 +27,29 @@ const reactsArray = [
     image: "../../../reacts/angry.gif",
   },
 ];
-export default function ReactsPopup({visible,setVisible}) {
-  
+export default function ReactsPopup({ visible, setVisible, postId }) {
+  const {user} = useSelector((state)=>({...state}))
+  const reactHandler = (type)=>{
+    reactPost(postId,type,user.token)
+  }
   return (
     <>
       {visible && (
-        <div className="reacts_popup"
-        onMouseOver={() => {
-            setTimeout(()=>{
-              setVisible(true)
-            },500)
+        <div
+          className="reacts_popup"
+          onMouseOver={() => {
+            setTimeout(() => {
+              setVisible(true);
+            }, 500);
           }}
           onMouseLeave={() => {
-            setTimeout(()=>{
-              setVisible(false)
-            },500)
+            setTimeout(() => {
+              setVisible(false);
+            }, 500);
           }}
         >
           {reactsArray.map((react, i) => (
-            <div className="react" key={i}>
+            <div className="react" key={i} onClick={()=>reactHandler(react.name)}>
               {<img src={react.image} alt="" />}
             </div>
           ))}

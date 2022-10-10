@@ -29,11 +29,12 @@ exports.listImages = async (req, res) => {
       .sort_by("public_id", `${sort}`)
       .max_results(max)
       .execute()
-      .then((result)=>{
-        res.json(result)
-      }).catch((err)=>{
-        console.log(err.error.message)
+      .then((result) => {
+        res.json(result);
       })
+      .catch((err) => {
+        console.log(err.error.message);
+      });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -46,13 +47,13 @@ const uploadToCloudinary = async (file, path) => {
       {
         folder: path,
       },
-      (err, res) => {
+      (err, resp) => {
         if (err) {
           removeTmp(file.tempFilePath);
-          return res.status(400).json({ message: "Upload image failed." });
+          return resp.status(400).json({ message: "Upload image failed." });
         }
         resolve({
-          url: res.secure_url,
+          url: resp.secure_url,
         });
       }
     );

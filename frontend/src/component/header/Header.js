@@ -10,6 +10,7 @@ export default function Header() {
   const color = "#65676b";
   const user = useSelector((user) => ({ ...user }));
   const [showSearchMenu, setShowSearchMenu] = useState(false);
+  console.log(user)
   return (
     <header>
       <div className="header_left">
@@ -39,7 +40,7 @@ export default function Header() {
       </div>
       <div className="header_right">
         <Link to="/profile" className="profile_link hover1">
-          <img src="images/arshad.jpg" alt="" />
+          <img src={user.user.picture} alt="" />
           <span>{user.user.first_name}</span>
         </Link>
         <Logout />

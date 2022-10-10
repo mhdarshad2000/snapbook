@@ -24,7 +24,7 @@ export default function Home({ setVisible, posts }) {
           ))}
         </div>
       </div>
-      <LeftHome user={user} />
+      {/* <LeftHome user={user} /> */}
     </div>
   );
 }

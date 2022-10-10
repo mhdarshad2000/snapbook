@@ -8,34 +8,36 @@ import ReactsPopup from "./ReactsPopup";
 import CreateComment from "./CreateComment";
 import PostMenu from "./PostMenu";
 
-export default function Post({ post,user }) {
+export default function Post({ post, user, profile }) {
   const [visible, setVisible] = useState(false);
   return (
-    <div className="post">
+    <div className="post" style={{ width: `${profile && "100%"}` }}>
       <div className="post_header">
         <Link
           to={`/profile/${post.user.username}`}
           className="post_header_left"
         >
           <img src={post.user.picture} alt="" />
-          <div className="post_profile_name">
-            {post.user.first_name} {post.user.last_name}
-            <div className="updated_p">
-              {post.type == "profilePicture" &&
-                `updated ${
-                  post.user.gender === "male" ? "his" : "her"
-                } profile picture`}
-              {post.type == "cover" &&
-                `updated ${
-                  post.user.gender === "male" ? "his" : "her"
-                } Cover picture`}
+          <div className="header_col">
+            <div className="post_profile_name">
+              {post.user.first_name} {post.user.last_name}
+              <div className="updated_p">
+                {post.type === "profilePicture" &&
+                  `updated ${
+                    post.user.gender === "male" ? "his" : "her"
+                  } profile picture`}
+                {post.type === "coverPicture" &&
+                  `updated ${
+                    post.user.gender === "male" ? "his" : "her"
+                  } Cover picture`}
+              </div>
             </div>
-          </div>
-          <div className="post_profile_privacy_date">
-            <Moment fromNow interval={30}>
-              {post.createdAt}
-            </Moment>
-            . <Public color="#828387" />
+            <div className="post_profile_privacy_date">
+              <Moment fromNow interval={30}>
+                {post.createdAt}
+              </Moment>
+              . <Public color="#828387" />
+            </div>
           </div>
         </Link>
         <div className="post_header_right hover1">
@@ -91,18 +93,22 @@ export default function Post({ post,user }) {
         </div>
       </div>
       <div className="post_actions">
-        <ReactsPopup visible={visible} setVisible={setVisible} />
+        <ReactsPopup
+          visible={visible}
+          setVisible={setVisible}
+          postId={post._id}
+        />
         <div
           className="post_action hover1"
           onMouseOver={() => {
-            setTimeout(()=>{
-              setVisible(true)
-            },500)
+            setTimeout(() => {
+              setVisible(true);
+            }, 500);
           }}
           onMouseLeave={() => {
-            setTimeout(()=>{
-              setVisible(false)
-            },500)
+            setTimeout(() => {
+              setVisible(false);
+            }, 500);
           }}
         >
           <i className="like_icon"></i>
