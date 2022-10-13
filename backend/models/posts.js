@@ -28,11 +28,12 @@ const postSchema = new mongoose.Schema(
         comment: {
           type: String,
         },
-        Image: {
+        image: {
           type: String,
         },
         commentBy: {
-          type: String,
+          type: ObjectId,
+          ref: "User",
         },
         commentAt: {
           type: Date,

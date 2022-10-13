@@ -27,7 +27,7 @@ function App() {
   });
   useEffect(() => {
     getAllPosts();
-  }, []);
+  },[user]);
 
   const getAllPosts = async () => {
     try {

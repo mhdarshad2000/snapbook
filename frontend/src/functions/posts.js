@@ -48,3 +48,33 @@ export const reactPost = async (postId, react, token) => {
     return error.response.data.message;
   }
 };
+export const getReacts = async (postId, token) => {
+  try {
+    const { data } = await Axios.get(`/getReacts/${postId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return data;
+  } catch (error) {
+    console.log(error);
+    return error.response.data.message;
+  }
+};
+export const commentPost = async (comment, image, postId, token) => {
+  try {
+    const { data } = await Axios.put(
+      "/comment",
+      {
+        comment,
+        image,
+        postId,
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+    return error.response.data.message;
+  }
+};

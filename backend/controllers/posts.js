@@ -11,11 +11,34 @@ exports.createPost = async (req, res) => {
 
 exports.getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find().populate(
-      "user",
-      "first_name last_name picture username gender"
-    ).sort({createdAt:-1});
+    const posts = await Post.find()
+      .populate("user", "first_name last_name picture username gender")
+      .sort({ createdAt: -1 });
     res.json(posts);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.comment = async (req, res) => {
+  try {
+    const { comment, image, postId } = req.body;
+    let newComment = await Post.findByIdAndUpdate(
+      postId,
+      {
+        $push: {
+          comments: {
+            comment: comment,
+            image: image,
+            commentBy: req.user.id,
+          },
+        },
+      },
+      {
+        new: true,
+      }
+    ).populate("comments.commentBy","picture first_name last_name user" )
+    res.json(newComment.comments);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

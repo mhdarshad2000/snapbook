@@ -9,6 +9,7 @@ const User = require("../models/user");
 const Post = require("../models/posts");
 const bcrypt = require("bcrypt");
 const { sendVerificationEmail } = require("../helpers/mailer");
+const user = require("../models/user");
 
 exports.register = async (req, res) => {
   try {
@@ -89,7 +90,7 @@ exports.register = async (req, res) => {
       message: "Register Success ! please activate your email to start",
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 exports.activateAccount = async (req, res) => {
@@ -116,7 +117,7 @@ exports.activateAccount = async (req, res) => {
         .json({ message: "Account has been activated succesfully." });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 exports.login = async (req, res) => {
@@ -143,7 +144,7 @@ exports.login = async (req, res) => {
       verified: user.verified,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -162,23 +163,47 @@ exports.sendVerification = async (req, res) => {
     );
     const uri = `${process.env.BASE_URL}/activate/${emailVerificationToken}`;
     sendVerificationEmail(user.email, user.first_name, uri);
-    res.status(200).json({ message: "Email verification link has been sent." });
+    return res
+      .status(200)
+      .json({ message: "Email verification link has been sent." });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
 exports.getProfile = async (req, res) => {
   try {
     const { username } = req.params;
+    const user = await User.findById(req.user.id);
     const profile = await User.findOne({ username }).select("-password");
+    const friendship = {
+      friends: false,
+      requestSent: false,
+      requestRecieved: false,
+    };
     if (!profile) {
-      return res.json({ ok: false });
+      res.json({ ok: false });
+    }
+    if (
+      user.friends.includes(profile._id) &&
+      profile.friends.includes(user._id)
+    ) {
+      friendship.friends = true;
+    }
+    if (user.requests.includes(profile._id)) {
+      friendship.requestRecieved = true;
+    }
+    if (profile.requests.includes(user._id)) {
+      friendship.requestSent = true;
     }
     const posts = await Post.find({ user: profile._id })
+      .populate(
+        "comments.commentBy",
+        "first_name last_name picture username commentAt"
+      )
       .populate("user")
-      .sort({ createdAt: -1 });
-    res.json({ ...profile.toObject(), posts });
+      .sort({ ceatedAt: -1 });
+    res.json({ ...profile.toObject(), posts, friendship });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -191,7 +216,7 @@ exports.updateProfilePicture = async (req, res) => {
     });
     res.json(url);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 exports.updateCoverPicture = async (req, res) => {
@@ -202,6 +227,147 @@ exports.updateCoverPicture = async (req, res) => {
     });
     res.json(url);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+// Add Friend
+exports.addFriend = async (req, res) => {
+  try {
+    if (req.user.id !== req.params.id) {
+      const sender = await User.findById(req.user.id);
+      const reciever = await User.findById(req.params.id);
+      if (
+        !reciever.requests.includes(sender._id) &&
+        !reciever.friends.includes(sender._id)
+      ) {
+        await reciever.updateOne({
+          $push: { requests: sender._id },
+        });
+        res.json({ message: "Friend requests has been sent" });
+      } else {
+        return res.status(400).json({ message: "The request is already sent" });
+      }
+    } else {
+      return res
+        .status(400)
+        .json({ message: "You can't send friend requests yourself" });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+exports.cancelRequests = async (req, res) => {
+  try {
+    if (req.user.id !== req.params.id) {
+      const sender = await User.findById(req.user.id);
+      const reciever = await User.findById(req.params.id);
+      if (
+        reciever.requests.includes(sender._id) &&
+        !reciever.friends.includes(sender._id)
+      ) {
+        await reciever.updateOne({
+          $pull: { requests: sender._id },
+        });
+        res.json({ message: "You succesfully cancelled the requests" });
+      } else {
+        return res.status(400).json({ message: "Already cancelled" });
+      }
+    } else {
+      return res
+        .status(400)
+        .json({ message: "You can't cancel friend requests yourself" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+exports.acceptRequset = async (req, res) => {
+  try {
+    if (req.user.id !== req.params.id) {
+      const reciever = await User.findById(req.user.id);
+      const sender = await User.findById(req.params.id);
+      if (reciever.requests.includes(sender._id)) {
+        await reciever.update({
+          $push: {
+            friends: sender._id,
+          },
+        });
+        await sender.update({
+          $push: { friends: reciever._id },
+        });
+        await reciever.updateOne({
+          $pull: {
+            requests: sender._id,
+          },
+        });
+        res.json({ message: "friend request accepted" });
+      }
+    } else {
+      return res
+        .status(400)
+        .json({ message: "You can't accept request yourself" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+exports.unFriend = async (req, res) => {
+  try {
+    if (req.user.id !== req.params.id) {
+      const sender = await User.findById(req.user.id);
+      const reciever = await User.findById(req.params.id);
+      if (
+        reciever.friends.includes(sender._id) &&
+        sender.friends.includes(reciever._id)
+      ) {
+        await reciever.update({
+          $pull: {
+            friends: sender.id,
+          },
+        });
+        await sender.update({
+          $pull: {
+            friends: reciever._id,
+          },
+        });
+        res.json({ message: "Unfriend request accepted" });
+      } else {
+        return res.status(400).json({ message: "Already not friends" });
+      }
+    } else {
+      return res.status(400).json({ message: "You can't unfriend yourself" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+exports.deleteRequest = async (req, res) => {
+  try {
+    if (req.user.id !== req.params.id) {
+      const reciever = await User.findById(req.user.id);
+      const sender = await User.findById(req.params.id);
+      if (reciever.requests.includes(sender._id)) {
+        await reciever.update({
+          $pull: {
+            requests: sender._id,
+          },
+        });
+        await sender.update({
+          $pull: {
+            requests: sender._id,
+          },
+        });
+        res.json({ message: "delete request accepted" });
+      } else {
+        return res.status(400).json({ message: "Already deleted" });
+      }
+    } else {
+      return res.status(400).json({ message: "You can't delete yourself" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
   }
 };

@@ -61,8 +61,6 @@ export default function CreatePostPopup({ user, setVisible }) {
         user.id,
         user.token
       );
-
-      // Stoped here pls continue
       setLoading(false);
       if (res === "ok") {
         setText("");
