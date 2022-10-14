@@ -176,6 +176,7 @@ exports.getProfile = async (req, res) => {
     const { username } = req.params;
     const user = await User.findById(req.user.id);
     const profile = await User.findOne({ username }).select("-password");
+
     const friendship = {
       friends: false,
       requestSent: false,
@@ -203,6 +204,7 @@ exports.getProfile = async (req, res) => {
       )
       .populate("user")
       .sort({ ceatedAt: -1 });
+    await profile.populate("friends", "first_name last_name username picture");
     res.json({ ...profile.toObject(), posts, friendship });
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -289,12 +291,12 @@ exports.acceptRequset = async (req, res) => {
       const reciever = await User.findById(req.user.id);
       const sender = await User.findById(req.params.id);
       if (reciever.requests.includes(sender._id)) {
-        await reciever.update({
+        await reciever.updateOne({
           $push: {
             friends: sender._id,
           },
         });
-        await sender.update({
+        await sender.updateOne({
           $push: { friends: reciever._id },
         });
         await reciever.updateOne({
@@ -322,12 +324,12 @@ exports.unFriend = async (req, res) => {
         reciever.friends.includes(sender._id) &&
         sender.friends.includes(reciever._id)
       ) {
-        await reciever.update({
+        await reciever.updateOne({
           $pull: {
-            friends: sender.id,
+            friends: sender._id,
           },
         });
-        await sender.update({
+        await sender.updateOne({
           $pull: {
             friends: reciever._id,
           },
@@ -350,12 +352,12 @@ exports.deleteRequest = async (req, res) => {
       const reciever = await User.findById(req.user.id);
       const sender = await User.findById(req.params.id);
       if (reciever.requests.includes(sender._id)) {
-        await reciever.update({
+        await reciever.updateOne({
           $pull: {
             requests: sender._id,
           },
         });
-        await sender.update({
+        await sender.updateOne({
           $pull: {
             requests: sender._id,
           },
@@ -367,6 +369,19 @@ exports.deleteRequest = async (req, res) => {
     } else {
       return res.status(400).json({ message: "You can't delete yourself" });
     }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+exports.updateDetails = async (req, res) => {
+  try {
+    const { infos } = req.body;
+    const updated = await User.findByIdAndUpdate(
+      req.user.id,
+      { details: infos },
+      { new: true }
+    );
+    res.json(updated.details)
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

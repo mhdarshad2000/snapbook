@@ -13,6 +13,7 @@ const {
   acceptRequset,
   unFriend,
   deleteRequest,
+  updateDetails
 } = require("../controllers/user");
 const { authUser } = require("../middlewares/auth");
 
@@ -30,5 +31,7 @@ router.put("/cancelRequests/:id", authUser, cancelRequests);
 router.put("/acceptRequset/:id", authUser, acceptRequset);
 router.put("/unFriend/:id", authUser, unFriend);
 router.put("/deleteRequest/:id", authUser, deleteRequest);
+router.put("/updateDetails", authUser, updateDetails);
+
 
 module.exports = router;

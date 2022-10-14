@@ -9,7 +9,7 @@ exports.authUser = async (req, res, next) => {
     }
     jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
       if (err) {
-        return res.status(400).json({ message: "Invalid Authentification" });
+        return res.status(400).json({ message: "Invalid Authentification1" });
       }
       req.user = user;
       next();

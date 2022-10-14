@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import ProfilePicture from "../../component/profilePicture/ProfilePicture";
+import Friendship from "./Friendship";
 
 export default function ProfilePictureInfos({ profile, visitor, photos }) {
   const [show, setShow] = useState(false);
@@ -31,11 +32,26 @@ export default function ProfilePictureInfos({ profile, visitor, photos }) {
             {profile.first_name} {profile.last_name}
             {/* <div className="other_name">(Other name)</div> */}
           </div>
-          <div className="profile_friend_count"></div>
-          <div className="profile_friend_imgs"></div>
+          <div className="profile_friend_count">
+            {profile?.friends?.length === 0
+              ? ""
+              : profile?.friends?.length === 1
+              ? " 1 friend"
+              : `${profile?.friends?.length} friends`}
+          </div>
+          <div className="profile_friend_imgs">
+            {profile?.friends &&
+              profile.friends
+                .slice(0, 6)
+                .map((friend, i) => (
+                  <img src={friend.picture} key={i} alt="" />
+                ))}
+          </div>
         </div>
       </div>
-      {visitor ?(""): (
+      {visitor ? (
+        <Friendship friendshipp={profile?.friendship} profileid={profile._id} />
+      ) : (
         <div className="profile_w_right">
           <div className="blue_btn">
             <img src="../../../icons/plus.png" alt="" className="invert" />

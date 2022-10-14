@@ -12,6 +12,8 @@ import CreatePost from "../../component/home/createPosts/CreatePost";
 import GridPosts from "./GridPosts";
 import Post from "../../component/posts/posts";
 import Photos from "./Photos";
+import Friends from "./Friends";
+import IntroProfile from "../../component/intro/IntroProfile";
 
 export default function Profile({ setVisible }) {
   const navigate = useNavigate();
@@ -96,11 +98,13 @@ export default function Profile({ setVisible }) {
           <div className="bottom_container">
             <div className="profile_grid">
               <div className="profile_left">
+                <IntroProfile detailss={profile.details} visitor={visitor} />
                 <Photos
                   username={userName}
                   token={user.token}
                   photos={photos}
                 />
+                <Friends friends={profile.friends} />
               </div>
               <div className="profile_right">
                 {!visitor && <CreatePost user={user} setVisible={setVisible} />}

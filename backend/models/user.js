@@ -63,22 +63,18 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    friends: {
-      type: Array,
-      default: [],
-    },
-    followers: {
-      type: Array,
-      default: [],
-    },
-    following: {
-      type: Array,
-      default: [],
-    },
-    requests: {
-      type: Array,
-      default: [],
-    },
+    friends: [
+      {
+        type:ObjectId,
+        ref:"User"
+      }
+    ],
+    requests: [
+      {
+        type:ObjectId,
+        ref:"User"
+      }
+    ],
     search: [
       {
         user: {
@@ -115,9 +111,6 @@ const userSchema = mongoose.Schema(
       relationship: {
         type: String,
         enum: ["Single", "In a relationship", "Married", "Divorced"],
-      },
-      instagram: {
-        type: String,
       },
     },
     savedPosts: [

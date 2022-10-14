@@ -1,0 +1,49 @@
+.info_profile{
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    color: var(--color-primary);
+    img{
+        filter: invert(40%);
+    }
+}
+.info_text{
+    word-break: break-word;
+}
+.info_col{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    button{
+        width: 100%;
+    }
+}
+.w100{
+    width: 100%;
+    margin: 10px 0;
+}
+.add_bio_wrap{
+    display: flex;
+    flex-direction: column;
+    .flex{
+        margin-top: 5px;
+        justify-content: space-between;
+    }
+}
+.details_input{
+    margin-top: 10px;
+    background: var(--bg-secondary) !important;
+    :focus{
+        outline-color: var(--blue-color) !important;
+        outline-offset: 1px !important;
+    }
+}
+.remaining{
+    font-size: 12px;
+    color: var(--color-secondary);
+    align-self: flex-end;
+    margin-top: 6px;
+}
