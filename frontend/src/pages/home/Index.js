@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useRef, useState } from "react";
 import "./style.css";
 import { useSelector } from "react-redux";
 import Header from "../../component/header/Header";
@@ -8,13 +8,17 @@ import CreatePost from "../../component/home/createPosts/CreatePost";
 import SendVerification from "../../component/home/sendVerification/SendVerification";
 import Post from "../../component/posts/posts";
 
-export default function Home({ setVisible, posts }) {
-  console.log(posts);
+export default function Home({ setVisible, posts, loading }) {
   const { user } = useSelector((user) => ({ ...user }));
+  const middle = useRef(null);
+  const [height, setHeight] = useState();
+  useEffect(() => {
+    setHeight(middle.current.clientHeight);
+  }, [loading, height]);
   return (
-    <div className="home">
+    <div className="home" style={{ height: `${height + 150}px` }}>
       <Header />
-      <div className="home_middle">
+      <div className="home_middle" ref={middle}>
         <Story />
         {user.verified ? "" : <SendVerification user={user} />}
         <CreatePost user={user} setVisible={setVisible} />

@@ -65,15 +65,15 @@ const userSchema = mongoose.Schema(
     },
     friends: [
       {
-        type:ObjectId,
-        ref:"User"
-      }
+        type: ObjectId,
+        ref: "User",
+      },
     ],
     requests: [
       {
-        type:ObjectId,
-        ref:"User"
-      }
+        type: ObjectId,
+        ref: "User",
+      },
     ],
     search: [
       {
@@ -87,16 +87,16 @@ const userSchema = mongoose.Schema(
       bio: {
         type: String,
       },
-      otherName: {
+      othername: {
         type: String,
       },
       job: {
         type: String,
       },
-      workPlace: {
+      workplace: {
         type: String,
       },
-      highSchool: {
+      highschool: {
         type: String,
       },
       college: {

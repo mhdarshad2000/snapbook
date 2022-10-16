@@ -36,7 +36,7 @@ exports.listImages = async (req, res) => {
         console.log(err.error.message);
       });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -50,14 +50,14 @@ const uploadToCloudinary = async (file, path) => {
       (err, res) => {
         if (err) {
           removeTmp(file.tempFilePath);
-          res.status(400).json({ message: "Upload image failed." });
+          return res.status(400).json({ message: "Upload image failed." });
         }
         resolve({
           url: res.secure_url,
         });
       }
     );
-  });
+  }).catch((err) => console.log(err));
 };
 
 const removeTmp = (path) => {

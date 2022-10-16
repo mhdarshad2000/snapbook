@@ -3,12 +3,15 @@ import "./style.scss";
 import Bio from "./Bio";
 import { Axios } from "../../helpers/Axios";
 import { useSelector } from "react-redux";
+import EditDetails from "./EditDetails";
 
-export default function IntroProfile({ detailss, visitor }) {
-  const [details, setDetails] = useState(detailss);
+export default function IntroProfile({ detailss, visitor, setOthername }) {
+  const [details, setDetails] = useState();
+  const [visible, setVisible] = useState(false);
   const { user } = useSelector((state) => ({ ...state }));
   useEffect(() => {
     setDetails(detailss);
+    setInfos(detailss)
   }, [detailss]);
   const initial = {
     bio: details?.bio ? details.bio : "",
@@ -18,16 +21,13 @@ export default function IntroProfile({ detailss, visitor }) {
     highschool: details?.highschool ? details.highschool : "",
     college: details?.college ? details.college : "",
     currentCity: details?.currentCity ? details.currentCity : "",
-    hometown: details?.hometown ? details.hometown : "",
+    homeTown: details?.homeTown ? details.homeTown : "",
     relationship: details?.relationship ? details.relationship : "",
   };
   const [infos, setInfos] = useState(initial);
   const [showBio, setShowBio] = useState(false);
   const [max, setMax] = useState(infos?.bio ? 100 - infos?.bio.length : 100);
-  const handleBioChange = (e) => {
-    setInfos({ ...infos, bio: e.target.value });
-    setMax(100 - e.target.value.length);
-  };
+
   const updateDetails = async () => {
     try {
       const { data } = await Axios.put(
@@ -41,9 +41,15 @@ export default function IntroProfile({ detailss, visitor }) {
       );
       setShowBio(false);
       setDetails(data);
+      setOthername(data.othername)
     } catch (error) {
       console.log(error.response.data.message);
     }
+  };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setInfos({ ...infos, [name]: value });
+    setMax(100 - e.target.value.length);
   };
   return (
     <div className="profile_card ">
@@ -62,17 +68,22 @@ export default function IntroProfile({ detailss, visitor }) {
         </div>
       )}
       {!visitor && !details?.bio && !showBio && (
-        <button className="gray_btn hover1 w100" onClick={() => setShowBio(true)}>
+        <button
+          className="gray_btn hover1 w100"
+          onClick={() => setShowBio(true)}
+        >
           Add Bio
         </button>
       )}
       {showBio && (
         <Bio
           infos={infos}
-          handleBioChange={handleBioChange}
+          handleChange={handleChange}
           max={max}
           setShowBio={setShowBio}
           updateDetails={updateDetails}
+          name="bio"
+          placeholder="Edit Bio"
         />
       )}
       {details?.job && !details?.workplace ? (
@@ -118,14 +129,23 @@ export default function IntroProfile({ detailss, visitor }) {
           Lives in {details?.currentCity}
         </div>
       )}
-      {details?.hometown && (
+      {details?.homeTown && (
         <div className="info_profile">
           <img src="../../../icons/home.png" alt="" />
-          From {details?.hometown}
+          From {details?.homeTown}
         </div>
       )}
       {!visitor && (
-        <button className="gray_btn hover1 w100">Edit Details</button>
+        <button className="gray_btn hover1 w100" onClick={()=>setVisible(true)}>Edit Details</button>
+      )}
+      {visible && !visitor && (
+        <EditDetails
+          details={details}
+          handleChange={handleChange}
+          updateDetails={updateDetails}
+          infos={infos}
+          setVisible={setVisible}
+        />
       )}
     </div>
   );

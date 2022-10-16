@@ -1,9 +1,10 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { profileReducer } from "../../functions/Reducers";
 import { Axios } from "../../helpers/Axios";
 import Header from "../../component/header/Header";
+import { useMediaQuery } from "react-responsive";
 import "./style.scss";
 import Cover from "./Cover";
 import ProfilePictureInfos from "./ProfilePictureInfos";
@@ -20,6 +21,7 @@ export default function Profile({ setVisible }) {
   const { username } = useParams();
   const { user } = useSelector((state) => ({ ...state }));
   const [photos, setPhotos] = useState({});
+  const [othername, setOthername] = useState();
   var userName = username === undefined ? user.username : username;
   const [{ loading, error, profile }, dispatch] = useReducer(profileReducer, {
     loading: false,
@@ -30,6 +32,9 @@ export default function Profile({ setVisible }) {
   useEffect(() => {
     getProfile();
   }, [userName]);
+  useEffect(() => {
+    setOthername(profile?.details?.othername);
+  }, [profile]);
   var visitor = userName === user.username ? false : true;
 
   const path = `${userName}/*`;
@@ -75,10 +80,29 @@ export default function Profile({ setVisible }) {
       });
     }
   };
+  const profileTop = useRef(null);
+  const [height, setHeight] = useState();
+  const leftSide = useRef(null);
+  const [Leftheight, setLeftHeight] = useState();
+  const [scrollheight, setScrollHeight] = useState();
+  useEffect(() => {
+    setHeight(profileTop.current.clientHeight + 300);
+    setLeftHeight(leftSide.current.clientHeight);
+    window.addEventListener("scroll", getScroll, { passive: true });
+    return () => {
+      window.addEventListener("scroll", getScroll, { passive: true });
+    };
+  }, [loading, scrollheight]);
+  const check = useMediaQuery({
+    query: "(min-width:901px)",
+  });
+  const getScroll = () => {
+    setScrollHeight(window.pageYOffset);
+  };
   return (
     <div className="profile">
       <Header />
-      <div className="profile_top">
+      <div className="profile_top" ref={profileTop}>
         <div className="profile_container">
           <Cover
             cover={profile.cover}
@@ -89,6 +113,7 @@ export default function Profile({ setVisible }) {
             profile={profile}
             visitor={visitor}
             photos={photos.resources}
+            othername={othername}
           />
           <ProfileMenu />
         </div>
@@ -96,9 +121,22 @@ export default function Profile({ setVisible }) {
       <div className="profile_bottom">
         <div className="profile_container">
           <div className="bottom_container">
-            <div className="profile_grid">
-              <div className="profile_left">
-                <IntroProfile detailss={profile.details} visitor={visitor} />
+            <div
+              className={`profile_grid ${
+                check && scrollheight >= height && Leftheight > 1000
+                  ? "scrollFixed showLess"
+                  : check &&
+                    scrollheight >= height &&
+                    Leftheight < 1000 &&
+                    "scrollFixed showMore"
+              }`}
+            >
+              <div className="profile_left" ref={leftSide}>
+                <IntroProfile
+                  detailss={profile.details}
+                  visitor={visitor}
+                  setOthername={setOthername}
+                />
                 <Photos
                   username={userName}
                   token={user.token}

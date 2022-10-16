@@ -2,7 +2,12 @@ import { useRef, useState } from "react";
 import ProfilePicture from "../../component/profilePicture/ProfilePicture";
 import Friendship from "./Friendship";
 
-export default function ProfilePictureInfos({ profile, visitor, photos }) {
+export default function ProfilePictureInfos({
+  profile,
+  visitor,
+  photos,
+  othername,
+}) {
   const [show, setShow] = useState(false);
   const pRef = useRef(null);
   return (
@@ -30,7 +35,7 @@ export default function ProfilePictureInfos({ profile, visitor, photos }) {
         <div className="profile_w_col">
           <div className="profile_name">
             {profile.first_name} {profile.last_name}
-            {/* <div className="other_name">(Other name)</div> */}
+            <div className="other_name">{othername && `(${othername})`}</div>
           </div>
           <div className="profile_friend_count">
             {profile?.friends?.length === 0
