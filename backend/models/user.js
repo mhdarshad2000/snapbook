@@ -81,6 +81,10 @@ const userSchema = mongoose.Schema(
           type: ObjectId,
           ref: "User",
         },
+        createdAt:{
+          type:Date,
+          required:true
+        }
       },
     ],
     details: {
@@ -121,7 +125,7 @@ const userSchema = mongoose.Schema(
         },
         savedAt: {
           type: Date,
-          default: new Date(),
+          required:true
         },
       },
     ],

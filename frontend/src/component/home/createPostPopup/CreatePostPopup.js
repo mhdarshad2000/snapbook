@@ -33,7 +33,7 @@ export default function CreatePostPopup({ user, setVisible }) {
         user.token
       );
       setLoading(false);
-      if (response === "ok") {
+      if (response.status === "ok") {
         setBackground("");
         setText("");
         setVisible(false);
@@ -62,7 +62,7 @@ export default function CreatePostPopup({ user, setVisible }) {
         user.token
       );
       setLoading(false);
-      if (res === "ok") {
+      if (res.status === "ok") {
         setText("");
         setImages("");
         setVisible(false);
@@ -81,7 +81,7 @@ export default function CreatePostPopup({ user, setVisible }) {
         user.token
       );
       setLoading(false);
-      if (response === "ok") {
+      if (response.status === "ok") {
         setBackground("");
         setText("");
         setVisible(false);

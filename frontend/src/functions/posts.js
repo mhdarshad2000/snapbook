@@ -22,10 +22,8 @@ export const createPost = async (
         headers: { Authorization: `Bearer ${token}` },
       }
     );
-    console.log(data);
-    return "ok";
+    return { status: "ok", data };
   } catch (error) {
-    console.log(error);
     return error.response.data.message;
   }
 };
@@ -68,6 +66,22 @@ export const commentPost = async (comment, image, postId, token) => {
         image,
         postId,
       },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+    return error.response.data.message;
+  }
+};
+
+export const savePost = async ({postId, token}) => {
+  try {
+    const { data } = await Axios.put(
+      `/savePost/${postId}`,
+      {},
       {
         headers: { Authorization: `Bearer ${token}` },
       }

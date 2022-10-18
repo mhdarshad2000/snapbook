@@ -41,23 +41,27 @@ exports.listImages = async (req, res) => {
 };
 
 const uploadToCloudinary = async (file, path) => {
-  return new Promise((resolve) => {
-    cloudinary.v2.uploader.upload(
-      file.tempFilePath,
-      {
-        folder: path,
-      },
-      (err, res) => {
-        if (err) {
-          removeTmp(file.tempFilePath);
-          return res.status(400).json({ message: "Upload image failed." });
+  try {
+    return new Promise((resolve) => {
+      cloudinary.v2.uploader.upload(
+        file.tempFilePath,
+        {
+          folder: path,
+        },
+        (err, res) => {
+          if (err) {
+            removeTmp(file.tempFilePath);
+            return res.status(400).json({ message: "Upload image failed." });
+          }
+          resolve({
+            url: res.secure_url,
+          });
         }
-        resolve({
-          url: res.secure_url,
-        });
-      }
-    );
-  }).catch((err) => console.log(err));
+      );
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const removeTmp = (path) => {

@@ -2,7 +2,6 @@ const fs = require("fs");
 
 module.exports = async function (req, res, next) {
   try {
-    console.log(req.files)
     if (!req.files || Object.values(req.files).flat().length === 0) {
       return res
         .status(400)
@@ -21,7 +20,7 @@ module.exports = async function (req, res, next) {
         removeTmp(file.tempFilePath);
         return res.status(400).json({ message: "Unsupported format" });
       }
-      if (file.size > 1024 * 1024) {
+      if (file.size > 1024 * 1024 * 5) {
         removeTmp(file.tempFilePath);
         return res.status(400).json({ message: "Large size format" });
       }

@@ -19,7 +19,7 @@ export const updateprofilePicture = async (url, token) => {
 
 export const updatecoverPicture = async (url, token) => {
   try {
-    const { data } = Axios.put(
+    const { data } = await Axios.put(
       "/updateCoverPicture",
       {
         url,
@@ -50,7 +50,7 @@ export const addFriend = async (id, token) => {
 };
 export const cancelRequests = async (id, token) => {
   try {
-    const { data } = Axios.put(
+    const { data } = await Axios.put(
       `cancelRequests/${id}`,
       {},
       {
@@ -64,7 +64,7 @@ export const cancelRequests = async (id, token) => {
 };
 export const acceptRequset = async (id, token) => {
   try {
-    const { data } = Axios.put(
+    const { data } = await Axios.put(
       `acceptRequset/${id}`,
       {},
       {
@@ -78,7 +78,7 @@ export const acceptRequset = async (id, token) => {
 };
 export const unFriend = async (id, token) => {
   try {
-    const { data } = Axios.put(
+    const { data } = await Axios.put(
       `unFriend/${id}`,
       {},
       {
@@ -92,7 +92,7 @@ export const unFriend = async (id, token) => {
 };
 export const deleteRequest = async (id, token) => {
   try {
-    const { data } = Axios.put(
+    const { data } = await Axios.put(
       `deleteRequest/${id}`,
       {},
       {
@@ -100,6 +100,47 @@ export const deleteRequest = async (id, token) => {
       }
     );
     return "ok";
+  } catch (error) {
+    return error.response.data.message;
+  }
+};
+export const searchUser = async (searchTerm, token) => {
+  try {
+    const { data } = await Axios.post(
+      `search/${searchTerm}`,
+      {},
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return data;
+  } catch (error) {
+    return error.response.data.message;
+  }
+};
+export const addToSearchHistory = async (searchUser, token) => {
+  try {
+    const { data } = await Axios.put(
+      "/addToSearchHistory",
+      { searchUser },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return data;
+  } catch (error) {
+    return error.response.data.message;
+  }
+};
+export const getSearchHistory = async ( token) => {
+  try {
+    const { data } = await Axios.get(
+      "/getSearchHistory",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return data;
   } catch (error) {
     return error.response.data.message;
   }

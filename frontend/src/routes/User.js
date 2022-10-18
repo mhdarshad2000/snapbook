@@ -40,7 +40,14 @@ export default function UserRouter() {
   };
   return (
     <Fragment>
-      {visible && <CreatePostPopup user={user} setVisible={setVisible} />}
+      {visible && (
+        <CreatePostPopup
+          user={user}
+          setVisible={setVisible}
+          posts={posts}
+          dispatch={dispatch}
+        />
+      )}
       <Routes>
         <Route element={<NotLoggedInRoute />}>
           <Route path="/login" element={<Login />} />
@@ -58,7 +65,9 @@ export default function UserRouter() {
           <Route path="/activate/:token" element={<Activate />} />
           <Route
             path="/"
-            element={<Home setVisible={setVisible} posts={posts} loading={loading} />}
+            element={
+              <Home setVisible={setVisible} posts={posts} loading={loading} />
+            }
           />
         </Route>
       </Routes>

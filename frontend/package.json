@@ -21,6 +21,7 @@
     "react-spinners": "^0.13.4",
     "redux-devtools-extension": "^2.13.9",
     "sass": "^1.55.0",
+    "styled-components": "^5.3.6",
     "uninstall": "^0.0.0",
     "web-vitals": "^2.1.4",
     "yup": "^0.32.11"

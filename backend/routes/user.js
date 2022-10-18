@@ -13,7 +13,10 @@ const {
   acceptRequset,
   unFriend,
   deleteRequest,
-  updateDetails
+  updateDetails,
+  search,
+  addToSearchHistory,
+  getSearchHistory,
 } = require("../controllers/user");
 const { authUser } = require("../middlewares/auth");
 
@@ -32,6 +35,9 @@ router.put("/acceptRequset/:id", authUser, acceptRequset);
 router.put("/unFriend/:id", authUser, unFriend);
 router.put("/deleteRequest/:id", authUser, deleteRequest);
 router.put("/updateDetails", authUser, updateDetails);
+router.post("/search/:searchTerm", authUser, search);
+router.put("/addToSearchHistory", authUser, addToSearchHistory);
+router.get("/getSearchHistory", authUser, getSearchHistory);
 
 
 module.exports = router;

@@ -10,25 +10,26 @@ export default function Header() {
   const color = "#65676b";
   const user = useSelector((user) => ({ ...user }));
   const [showSearchMenu, setShowSearchMenu] = useState(false);
-  console.log(user)
   return (
     <header>
       <div className="header_left">
-
-          <Link to="/">
-            <div className="header_logo">Snapbook</div>
-          </Link>
-          <div
-            className="search search_1"
-            onClick={() => setShowSearchMenu(true)}
-          >
-            <Search color={color} />
-            <input type="text" placeholder="Search.." className="hide_input" />
-          </div>
+        <Link to="/">
+          <div className="header_logo">Snapbook</div>
+        </Link>
+        <div
+          className="search search_1"
+          onClick={() => setShowSearchMenu(true)}
+        >
+          <Search color={color} />
+          <input type="text" placeholder="Search.." className="hide_input" />
         </div>
+      </div>
 
       {showSearchMenu && (
-        <SearchMenu color={color} setShowSearchMenu={setShowSearchMenu} />
+        <SearchMenu
+          color={color}
+          setShowSearchMenu={setShowSearchMenu}
+        />
       )}
       <div className="header_middle">
         <Link to="/" className="middle_icon hover1">

@@ -9,7 +9,6 @@ const User = require("../models/user");
 const Post = require("../models/posts");
 const bcrypt = require("bcrypt");
 const { sendVerificationEmail } = require("../helpers/mailer");
-const user = require("../models/user");
 
 exports.register = async (req, res) => {
   try {
@@ -381,7 +380,55 @@ exports.updateDetails = async (req, res) => {
       { details: infos },
       { new: true }
     );
-    res.json(updated.details)
+    res.json(updated.details);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+exports.search = async (req, res) => {
+  try {
+    const searchTerm = req.params.searchTerm;
+    const results = await User.find({ $text: { $search: searchTerm } }).select(
+      "first_name last_name username picture"
+    );
+    res.json(results);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+exports.addToSearchHistory = async (req, res) => {
+  try {
+    const { searchUser } = req.body;
+    const search = {
+      user: searchUser,
+      createdAt: new Date(),
+    };
+    const user = await User.findById(req.user.id);
+    const check = user.search.find((x) => x.user.toString() === searchUser);
+    if (check) {
+      await User.updateOne(
+        { _id: req.user.id, "search._id": check._id },
+        {
+          $set: { "search.$.createdAt": new Date() },
+        }
+      );
+    } else {
+      await User.findByIdAndUpdate(req.user.id, {
+        $push: {
+          search,
+        },
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+exports.getSearchHistory = async (req, res) => {
+  try {
+    const results = await User.findById(req.user.id)
+      .select("search")
+      .populate("search.user", "first_name last_name picture username");
+    res.json(results.search);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

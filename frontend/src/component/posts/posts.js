@@ -3,11 +3,9 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import Public from "../../svg/public";
-import Dots from "../../svg/dots";
 import ReactsPopup from "./ReactsPopup";
 import CreateComment from "./CreateComment";
-import PostMenu from "./PostMenu";
-import { getReacts } from "../../functions/posts";
+import { getReacts, savePost } from "../../functions/posts";
 import { reactPost } from "../../functions/posts";
 
 export default function Post({ post, user, profile }) {
@@ -15,15 +13,16 @@ export default function Post({ post, user, profile }) {
   const [reacts, setReacts] = useState();
   const [check, setCheck] = useState();
   const [total, setTotal] = useState(0);
+  const [checkSaved, setCheckSaved] = useState();
   useEffect(() => {
     getPostReacts();
   }, [post]);
-  console.log(post)
   const getPostReacts = async () => {
     const res = await getReacts(post._id, user.token);
     setReacts(res.reacts);
     setCheck(res.check);
     setTotal(res.total);
+    setCheckSaved(res.checkSaved);
   };
 
   const reactHandler = (type) => {
@@ -38,7 +37,7 @@ export default function Post({ post, user, profile }) {
     } else {
       setCheck(type);
       let index = reacts.findIndex((x) => x.react == type);
-      let index1 = reacts.findIndex((x)=>x.react == check)
+      let index1 = reacts.findIndex((x) => x.react == check);
       if (index !== -1) {
         setReacts([...reacts, (reacts[index].count = ++reacts[index].count)]);
         setTotal((prev) => ++prev);
@@ -47,6 +46,14 @@ export default function Post({ post, user, profile }) {
         setReacts([...reacts, (reacts[index].count = --reacts[index].count)]);
         setTotal((prev) => --prev);
       }
+    }
+  };
+  const saveHandler = async () => {
+    await savePost({ postId: post._id, token: user.token });
+    if (checkSaved) {
+      setCheckSaved(false);
+    } else {
+      setCheckSaved(true);
     }
   };
   return (
@@ -75,12 +82,16 @@ export default function Post({ post, user, profile }) {
               <Moment fromNow interval={30}>
                 {post.createdAt}
               </Moment>
-              . <Public color="#828387" />
+              <Public color="#828387" />
             </div>
           </div>
         </Link>
-        <div className="post_header_right hover1">
-          <Dots color="#828387" />
+        <div className="post_header_right hover1" onClick={() => saveHandler()}>
+          {checkSaved ? (
+            <i className="save_icon"></i>
+          ) : (
+            <i className="save_icon "></i>
+          )}
         </div>
       </div>
       {post.background ? (
@@ -133,7 +144,11 @@ export default function Post({ post, user, profile }) {
                 .map(
                   (react) =>
                     react.count > 0 && (
-                      <img key={react.react} src={`../../../reacts/${react.react}.svg`} alt="" />
+                      <img
+                        key={react.react}
+                        src={`../../../reacts/${react.react}.svg`}
+                        alt=""
+                      />
                     )
                 )}
           </div>
@@ -215,7 +230,6 @@ export default function Post({ post, user, profile }) {
           <CreateComment user={user} postId={post._id} />
         </div>
       </div>
-      <PostMenu />
     </div>
   );
 }
