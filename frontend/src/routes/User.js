@@ -12,6 +12,7 @@ import { useState, useEffect, useReducer } from "react";
 import { useSelector } from "react-redux";
 import { postsReducer } from "../functions/Reducers";
 import CreatePostPopup from "../component/home/createPostPopup/CreatePostPopup";
+import Messenger from "../pages/messenger/Messenger";
 
 export default function UserRouter() {
   const { user } = useSelector((state) => ({ ...state }));
@@ -62,6 +63,7 @@ export default function UserRouter() {
             path="/profile/:username"
             element={<Profile setVisible={setVisible} />}
           />
+          <Route path="/messenger" element={<Messenger />} />
           <Route path="/activate/:token" element={<Activate />} />
           <Route
             path="/"
