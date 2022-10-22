@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useParams } from "react-router-dom";
 import NotLoggedInRoute from "../protectedRouters/NotLoggedInRoute";
 import LoggedInRouter from "../protectedRouters/LoggedInRouter";
 import Login from "../pages/login";
@@ -13,8 +13,10 @@ import { useSelector } from "react-redux";
 import { postsReducer } from "../functions/Reducers";
 import CreatePostPopup from "../component/home/createPostPopup/CreatePostPopup";
 import Messenger from "../pages/messenger/Messenger";
+import Friends from "../pages/friends/Friends";
 
 export default function UserRouter() {
+
   const { user } = useSelector((state) => ({ ...state }));
   const [visible, setVisible] = useState(false);
   const [{ loading, error, posts }, dispatch] = useReducer(postsReducer, {
@@ -64,6 +66,8 @@ export default function UserRouter() {
             element={<Profile setVisible={setVisible} />}
           />
           <Route path="/messenger" element={<Messenger />} />
+          <Route path="/friends" element={<Friends />} />
+          <Route path="/friends/:type" element={<Friends />} />
           <Route path="/activate/:token" element={<Activate />} />
           <Route
             path="/"

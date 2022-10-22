@@ -2,11 +2,11 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import "./style.css";
 import SearchMenu from "./SearchMenu";
-import { Search, HomeActive, Friends } from "../../svg";
+import { Search, HomeActive, Friends, Home } from "../../svg";
 import Logout from "./Logout";
 import { useSelector } from "react-redux";
 
-export default function Header() {
+export default function Header({ getAllPosts, page }) {
   const color = "#65676b";
   const user = useSelector((user) => ({ ...user }));
   const [showSearchMenu, setShowSearchMenu] = useState(false);
@@ -26,17 +26,21 @@ export default function Header() {
       </div>
 
       {showSearchMenu && (
-        <SearchMenu
-          color={color}
-          setShowSearchMenu={setShowSearchMenu}
-        />
+        <SearchMenu color={color} setShowSearchMenu={setShowSearchMenu} />
       )}
       <div className="header_middle">
-        <Link to="/" className="middle_icon hover1">
-          <HomeActive color={color} />
+        <Link
+          to="/"
+          className={`middle_icon ${page === "home" ? "active" : "hover1"}`}
+          onClick={() => getAllPosts()}
+        >
+          {page === "home" ? <HomeActive /> : <Home color={color} />}
         </Link>
-        <Link to=" /" className="middle_icon hover1">
-          <Friends color={color} />
+        <Link
+          to="/friends"
+          className={`middle_icon ${page === "friends" ? "active" : "hover1"}`}
+        >
+          <Friends color={color} page={page} />
         </Link>
       </div>
       <div className="header_right">

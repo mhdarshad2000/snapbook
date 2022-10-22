@@ -145,3 +145,16 @@ export const getSearchHistory = async ( token) => {
     return error.response.data.message;
   }
 };
+export const getFriendsPageInfos = async ( token) => {
+  try {
+    const { data } = await Axios.get(
+      "/getFriendsPageInfos",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return {status:"ok",data};
+  } catch (error) {
+    return error.response.data.message;
+  }
+};

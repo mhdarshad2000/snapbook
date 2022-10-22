@@ -19,6 +19,7 @@ const {
   getSearchHistory,
   getUser,
   getFriends,
+  getFriendsPageInfos,
 } = require("../controllers/user");
 const { authUser } = require("../middlewares/auth");
 
@@ -42,5 +43,6 @@ router.put("/addToSearchHistory", authUser, addToSearchHistory);
 router.get("/getSearchHistory", authUser, getSearchHistory);
 router.get("/getUser/:id", authUser, getUser);
 router.get("/getFriends", authUser, getFriends);
+router.get("/getFriendsPageInfos", authUser, getFriendsPageInfos);
 
 module.exports = router;

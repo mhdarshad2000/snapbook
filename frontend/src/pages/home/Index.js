@@ -17,7 +17,7 @@ export default function Home({ setVisible, posts, loading }) {
   }, [loading, height]);
   return (
     <div className="home" style={{ height: `${height + 150}px` }}>
-      <Header />
+      <Header page="home" />
       <div className="home_middle" ref={middle}>
         <Story />
         {user.verified ? "" : <SendVerification user={user} />}
