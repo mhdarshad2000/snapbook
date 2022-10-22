@@ -17,6 +17,8 @@ const {
   search,
   addToSearchHistory,
   getSearchHistory,
+  getUser,
+  getFriends,
 } = require("../controllers/user");
 const { authUser } = require("../middlewares/auth");
 
@@ -38,6 +40,7 @@ router.put("/updateDetails", authUser, updateDetails);
 router.post("/search/:searchTerm", authUser, search);
 router.put("/addToSearchHistory", authUser, addToSearchHistory);
 router.get("/getSearchHistory", authUser, getSearchHistory);
-
+router.get("/getUser/:id", authUser, getUser);
+router.get("/getFriends", authUser, getFriends);
 
 module.exports = router;

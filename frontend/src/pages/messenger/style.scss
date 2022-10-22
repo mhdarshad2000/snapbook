@@ -104,3 +104,13 @@
     top: 2px;
     right: 2px;
 }
+.no_conversation_text{
+    display: flex;
+    height: 70vh;
+    font-weight: 500;
+    color: rgb(209, 209, 209);
+    font-size: 40px;
+    align-items: center;
+    justify-content: center;
+    cursor:default;
+}

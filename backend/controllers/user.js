@@ -9,6 +9,7 @@ const User = require("../models/user");
 const Post = require("../models/posts");
 const bcrypt = require("bcrypt");
 const { sendVerificationEmail } = require("../helpers/mailer");
+const mongoose = require("mongoose");
 
 exports.register = async (req, res) => {
   try {
@@ -86,6 +87,7 @@ exports.register = async (req, res) => {
       last_name: user.last_name,
       token: token,
       verified: user.verified,
+      friends: user.friends,
       message: "Register Success ! please activate your email to start",
     });
   } catch (error) {
@@ -141,6 +143,7 @@ exports.login = async (req, res) => {
       last_name: user.last_name,
       token: token,
       verified: user.verified,
+      friends: user.friends,
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -429,6 +432,27 @@ exports.getSearchHistory = async (req, res) => {
       .select("search")
       .populate("search.user", "first_name last_name picture username");
     res.json(results.search);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+exports.getUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select(
+      "first_name last_name username gender picture"
+    );
+    res.status(200).json(user);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+exports.getFriends = async (req, res) => {
+  try {
+    const friends = await User.findById(req.user.id)
+      .select("first_name last_name username picture friends")
+      .populate("friends", "first_name last_name username picture");
+    res.json(friends);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
