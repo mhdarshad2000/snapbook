@@ -5,7 +5,7 @@ export default function Friends({ friends }) {
     <div className="profile_card">
       <div className="profile_card_header">
         Friends
-        <div className="profile_header_link">See all Friends</div>
+        <Link to="/friends" className="profile_header_link">See all Friends</Link>
       </div>
       <div className="profile_card_count">
         {friends?.length === 0

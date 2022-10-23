@@ -5,7 +5,7 @@ import { uploadImages } from "../../functions/uploadImages";
 import dataURItoBlob from "../../helpers/DataUriToBlob";
 import { SquareLoader } from "react-spinners";
 
-export default function CreateComment({ user, postId }) {
+export default function CreateComment({ user, postId,setComments }) {
   const [picker, setPicker] = useState(false);
   const [text, setText] = useState("");
   const [error, setError] = useState("");
@@ -69,12 +69,14 @@ export default function CreateComment({ user, postId }) {
           postId,
           user.token
         );
+        setComments(comment)
         setLoading(false);
         setText("");
         setCommentImage("");
       } else {
         setLoading(true);
         const comment = await commentPost(text, "", postId, user.token);
+        setComments(comment)
         setLoading(false);
         setText("")
         setCommentImage("")

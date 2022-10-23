@@ -5,6 +5,7 @@ import SearchMenu from "./SearchMenu";
 import { Search, HomeActive, Friends, Home } from "../../svg";
 import Logout from "./Logout";
 import { useSelector } from "react-redux";
+import { FaFacebookMessenger } from "react-icons/fa";
 
 export default function Header({ getAllPosts, page }) {
   const color = "#65676b";
@@ -16,13 +17,17 @@ export default function Header({ getAllPosts, page }) {
         <Link to="/">
           <div className="header_logo">Snapbook</div>
         </Link>
-        <div
-          className="search search_1"
-          onClick={() => setShowSearchMenu(true)}
-        >
-          <Search color={color} />
-          <input type="text" placeholder="Search.." className="hide_input" />
-        </div>
+        {showSearchMenu ? (
+          ""
+        ) : (
+          <div
+            className="search search_1"
+            onClick={() => setShowSearchMenu(true)}
+          >
+            <Search color={color} />
+            <input type="text" placeholder="Search.." className="hide_input" />
+          </div>
+        )}
       </div>
 
       {showSearchMenu && (
@@ -41,6 +46,14 @@ export default function Header({ getAllPosts, page }) {
           className={`middle_icon ${page === "friends" ? "active" : "hover1"}`}
         >
           <Friends color={color} page={page} />
+        </Link>
+        <Link
+          to="/messenger"
+          className={`middle_icon ${
+            page === "messenger" ? "active" : "hover1"
+          }`}
+        >
+          <FaFacebookMessenger className="messenger" />
         </Link>
       </div>
       <div className="header_right">

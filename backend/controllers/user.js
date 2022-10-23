@@ -200,11 +200,11 @@ exports.getProfile = async (req, res) => {
       friendship.requestSent = true;
     }
     const posts = await Post.find({ user: profile._id })
+      .populate("user")
       .populate(
         "comments.commentBy",
         "first_name last_name picture username commentAt"
       )
-      .populate("user")
       .sort({ ceatedAt: -1 });
     await profile.populate("friends", "first_name last_name username picture");
     res.json({ ...profile.toObject(), posts, friendship });
@@ -468,9 +468,9 @@ exports.getFriendsPageInfos = async (req, res) => {
       requests: mongoose.Types.ObjectId(req.user.id),
     }).select("first_name last_name username picture");
     res.json({
-      friends:friend.friends,
-      request:friend.requests,
-      sentRequests
+      friends: friend.friends,
+      request: friend.requests,
+      sentRequests,
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });

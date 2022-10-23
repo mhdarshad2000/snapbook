@@ -1,5 +1,5 @@
 import "./style.scss";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import Public from "../../svg/public";
@@ -7,6 +7,9 @@ import ReactsPopup from "./ReactsPopup";
 import CreateComment from "./CreateComment";
 import { getReacts, savePost } from "../../functions/posts";
 import { reactPost } from "../../functions/posts";
+import Comment from "./Comment";
+import { HiOutlineDotsVertical } from "react-icons/hi";
+import DeletePost from "./DeletePost";
 
 export default function Post({ post, user, profile }) {
   const [visible, setVisible] = useState(false);
@@ -14,9 +17,21 @@ export default function Post({ post, user, profile }) {
   const [check, setCheck] = useState();
   const [total, setTotal] = useState(0);
   const [checkSaved, setCheckSaved] = useState();
+  const [comments, setComments] = useState([]);
+  const [count, setCount] = useState(1);
+  const [displayComment, setDisplayComment] = useState(false);
+  const [menuItems, setMenuItems] = useState(false);
+  useEffect(() => {
+    setComments(post?.comments);
+  }, [post]);
   useEffect(() => {
     getPostReacts();
   }, [post]);
+
+  const showMore = () => {
+    setCount((prev) => prev + 3);
+  };
+
   const getPostReacts = async () => {
     const res = await getReacts(post._id, user.token);
     setReacts(res.reacts);
@@ -56,8 +71,13 @@ export default function Post({ post, user, profile }) {
       setCheckSaved(true);
     }
   };
+  const postRef = useRef(null);
   return (
-    <div className="post" style={{ width: `${profile && "100%"}` }}>
+    <div
+      className="post"
+      style={{ width: `${profile && "100%"}` }}
+      ref={postRef}
+    >
       <div className="post_header">
         <Link
           to={`/profile/${post.user.username}`}
@@ -86,14 +106,28 @@ export default function Post({ post, user, profile }) {
             </div>
           </div>
         </Link>
-        <div className="post_header_right hover1" onClick={() => saveHandler()}>
-          {checkSaved ? (
-            <i className="save_icon"></i>
-          ) : (
-            <i className="save_icon "></i>
-          )}
+        <div className="post_right_header">
+          <div
+            className={`post_header_right ${
+              checkSaved ? "saved_bg" : "hover1"
+            }`}
+            onClick={() => saveHandler()}
+          >
+            <i className={`save_icon ${checkSaved && "invert"}`}></i>
+          </div>
+          <div className="small_circle" onClick={() => setMenuItems(true)}>
+            <HiOutlineDotsVertical />
+          </div>
         </div>
       </div>
+      {menuItems && (
+        <DeletePost
+          setMenuItems={setMenuItems}
+          postId={post._id}
+          token={user.token}
+          postRef={postRef}
+        />
+      )}
       {post.background ? (
         <div
           className="post_bg"
@@ -155,7 +189,7 @@ export default function Post({ post, user, profile }) {
           <div className="reacts_count_num">{total > 0 && total}</div>
         </div>
         <div className="to_right">
-          <div className="comments_count">13 comments</div>
+          <div className="comments_count">{comments?.length} comments</div>
           <div className="share_count">1 share</div>
         </div>
       </div>
@@ -216,7 +250,10 @@ export default function Post({ post, user, profile }) {
             {check ? check : "Like"}
           </span>
         </div>
-        <div className="post_action hover1">
+        <div
+          className="post_action hover1"
+          onClick={() => setDisplayComment(true)}
+        >
           <i className="comment_icon"></i>
           <span>Comment</span>
         </div>
@@ -225,11 +262,37 @@ export default function Post({ post, user, profile }) {
           <span>Share</span>
         </div>
       </div>
-      <div className="comments_wrap">
-        <div className="comments_order">
-          <CreateComment user={user} postId={post._id} />
+      {displayComment && (
+        <div className="comments_wrap">
+          <div className="close_comment">
+            <div
+              className="small_circle hover1"
+              onClick={() => setDisplayComment(false)}
+            >
+              <i className="exit_icon"></i>
+            </div>
+          </div>
+          <div className="comments_order">
+            <CreateComment
+              user={user}
+              postId={post._id}
+              setComments={setComments}
+            />
+            {comments &&
+              comments
+                .sort((a, b) => {
+                  return new Date(b.commentAt) - new Date(a.commentAt);
+                })
+                .slice(0, count)
+                .map((comment, i) => <Comment comment={comment} key={i} />)}
+            {count < comments.length && (
+              <div className="view_comments" onClick={() => showMore()}>
+                Load more comments...
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

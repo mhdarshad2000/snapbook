@@ -10,7 +10,7 @@ import PostError from "./PostError";
 import dataURItoBlob from "../../../helpers/DataUriToBlob";
 import { uploadImages } from "../../../functions/uploadImages";
 
-export default function CreatePostPopup({ user, setVisible }) {
+export default function CreatePostPopup({ user, setVisible, posts, dispatch }) {
   const [text, setText] = useState("");
   const [showPreview, setShowPreview] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -34,6 +34,7 @@ export default function CreatePostPopup({ user, setVisible }) {
       );
       setLoading(false);
       if (response.status === "ok") {
+        dispatch({ type: "POST_SUCCESS", payload: [response.data, ...posts] });
         setBackground("");
         setText("");
         setVisible(false);
@@ -63,6 +64,7 @@ export default function CreatePostPopup({ user, setVisible }) {
       );
       setLoading(false);
       if (res.status === "ok") {
+        dispatch({ type: "POST_SUCCESS", payload: [res.data, ...posts] });
         setText("");
         setImages("");
         setVisible(false);
@@ -82,6 +84,7 @@ export default function CreatePostPopup({ user, setVisible }) {
       );
       setLoading(false);
       if (response.status === "ok") {
+        dispatch({ type: "POST_SUCCESS", payload: [response.data, ...posts] });
         setBackground("");
         setText("");
         setVisible(false);

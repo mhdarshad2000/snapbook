@@ -21,7 +21,6 @@ export default function Messenger() {
   const [newMessage, setNewMessage] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
-  const [userF, setUserF] = useState();
   const { user } = useSelector((user) => ({ ...user }));
   const scrollRef = useRef(null);
   const socket = useRef();
@@ -103,7 +102,7 @@ export default function Messenger() {
 
   return (
     <Fragment>
-      <Header />
+      <Header page="messenger" />
       <MessengerWrapper>
         <div className="chatMenu">
           <div className="chatMenu_wrapper">

@@ -9,7 +9,7 @@ export const createPost = async (
   token
 ) => {
   try {
-    const { data } = Axios.post(
+    const { data } = await Axios.post(
       "/createPost",
       {
         type,
@@ -77,7 +77,7 @@ export const commentPost = async (comment, image, postId, token) => {
   }
 };
 
-export const savePost = async ({postId, token}) => {
+export const savePost = async ({ postId, token }) => {
   try {
     const { data } = await Axios.put(
       `/savePost/${postId}`,
@@ -89,6 +89,16 @@ export const savePost = async ({postId, token}) => {
     return data;
   } catch (error) {
     console.log(error);
+    return error.response.data.message;
+  }
+};
+export const deletePost = async (postId, token) => {
+  try {
+    const { data } = await Axios.delete(`/deletePost/${postId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return { status: "ok" };
+  } catch (error) {
     return error.response.data.message;
   }
 };

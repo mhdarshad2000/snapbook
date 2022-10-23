@@ -16,7 +16,6 @@ import Messenger from "../pages/messenger/Messenger";
 import Friends from "../pages/friends/Friends";
 
 export default function UserRouter() {
-
   const { user } = useSelector((state) => ({ ...state }));
   const [visible, setVisible] = useState(false);
   const [{ loading, error, posts }, dispatch] = useReducer(postsReducer, {
@@ -42,7 +41,7 @@ export default function UserRouter() {
     }
   };
   return (
-    <Fragment>
+    <>
       {visible && (
         <CreatePostPopup
           user={user}
@@ -77,6 +76,6 @@ export default function UserRouter() {
           />
         </Route>
       </Routes>
-    </Fragment>
+    </>
   );
 }

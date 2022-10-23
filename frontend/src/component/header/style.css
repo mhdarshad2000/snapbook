@@ -204,4 +204,8 @@ header{
     max-height: 70vh;
     overflow-y: auto;
 }
+.messenger{
+    color: var(--color-secondary);
+    font-size: 18px;
+}
 /************* Header Search **********/

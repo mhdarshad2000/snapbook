@@ -149,9 +149,13 @@ export default function Profile({ setVisible }) {
                 <GridPosts />
                 <div className="posts">
                   {profile.posts && profile.posts.length ? (
-                    profile.posts.map((post) => (
-                      <Post key={post._id} post={post} user={user} profile />
-                    ))
+                    profile.posts
+                      .sort((a, b) => {
+                        return new Date(b.createdAt) - new Date(a.createdAt);
+                      })
+                      .map((post) => (
+                        <Post key={post._id} post={post} user={user} profile />
+                      ))
                   ) : (
                     <div className="no_post">No Posts To Display</div>
                   )}

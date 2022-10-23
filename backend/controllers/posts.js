@@ -16,10 +16,6 @@ exports.createPost = async (req, res) => {
 
 exports.getAllPosts = async (req, res) => {
   try {
-    // const posts = await Post.find()
-    //   .populate("user", "first_name last_name picture username gender")
-    //   .sort({ createdAt: -1 });
-    // res.json(posts);
     const friendsTemp = await User.findById(req.user.id).select("friends");
     const friends = friendsTemp.friends;
     const promises = friends.map((user) => {
@@ -56,6 +52,7 @@ exports.comment = async (req, res) => {
             comment: comment,
             image: image,
             commentBy: req.user.id,
+            commentAt: new Date(),
           },
         },
       },
@@ -93,7 +90,15 @@ exports.savePost = async (req, res) => {
         },
       });
     }
-    return res.status(200).json({message:"Saved succesfully"})
+    return res.status(200).json({ message: "Saved succesfully" });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+exports.deletePost = async (req, res) => {
+  try {
+    await Post.findByIdAndRemove(req.params.id);
+    return res.status(200).json({ status: "ok" });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
