@@ -63,6 +63,10 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isBlocked:{
+      type:Boolean,
+      default:false
+    },
     friends: [
       {
         type: ObjectId,
@@ -81,10 +85,10 @@ const userSchema = mongoose.Schema(
           type: ObjectId,
           ref: "User",
         },
-        createdAt:{
-          type:Date,
-          required:true
-        }
+        createdAt: {
+          type: Date,
+          required: true,
+        },
       },
     ],
     details: {
@@ -125,7 +129,7 @@ const userSchema = mongoose.Schema(
         },
         savedAt: {
           type: Date,
-          required:true
+          required: true,
         },
       },
     ],

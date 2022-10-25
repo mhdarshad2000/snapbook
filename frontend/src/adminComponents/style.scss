@@ -1,0 +1,21 @@
+.sidebar{
+    color: white;
+}
+.menu{
+    li{
+       :hover{
+       background-color:#5e6ec9 ;
+   }
+}
+}
+.flex_sidebar{
+    display: flex;
+    align-items: center;
+    span{
+        margin-left: 5px;
+    }
+}
+.menu-label{
+    display: flex;
+    align-items: center;
+}

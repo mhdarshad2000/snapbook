@@ -35,6 +35,7 @@ export default function Messenger() {
       });
     });
   }, []);
+  console.log(arrivalMessage);
   useEffect(() => {
     arrivalMessage &&
       currentChat.members.includes(arrivalMessage.sender) &&

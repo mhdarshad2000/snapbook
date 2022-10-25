@@ -8,7 +8,7 @@ export default function AdminLogout() {
   const navigate = useNavigate();
   const logout = () => {
     Cookies.set("admin", "");
-    dispatch({ type: "ADMINLOGOUT" });
+    dispatch({ type: "ADMIN_LOGOUT" });
     navigate("/admin");
   };
   return (

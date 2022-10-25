@@ -5,3 +5,9 @@ exports.generateToken = (payload,expired)=>{
         expiresIn:expired
     })
 }
+
+exports.generateAdminToken = (payload,expired)=>{
+    return jwt.sign(payload,process.env.ADMIN_TOKEN_SECRET,{
+        expiresIn:expired
+    })
+}

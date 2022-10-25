@@ -39,8 +39,8 @@ export default function AdminLogin() {
       });
       setLoading(false);
       dispatch({ type: "ADMIN_LOGIN", payload: data });
+      navigate("/admin/home");
       Cookies.set("admin", JSON.stringify(data));
-      navigate("/adminhome");
     } catch (error) {
       setLoading(false);
       setError(error.response.data.message);

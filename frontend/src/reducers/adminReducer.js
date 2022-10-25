@@ -1,15 +1,15 @@
 import Cookies from "js-cookie";
 
 export function adminReducer(
-    state = Cookies.get("admin") ? JSON.parse(Cookies.get("admin")):null,
-    action
-){
-    switch (action.type){
-        case "ADMINLOGIN" :
-            return action.payload
-        case "ADMINLOGOUT" :
-            return null
-        default:
-            return state
-    }
+  state = Cookies.get("admin") ? JSON.parse(Cookies.get("admin")) : null,
+  action
+) {
+  switch (action.type) {
+    case "ADMIN_LOGIN":
+      return action.payload;
+    case "ADMIN_LOGOUT":
+      return null;
+    default:
+      return state;
+  }
 }
