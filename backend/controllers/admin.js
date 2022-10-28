@@ -3,6 +3,7 @@ const User = require("../models/user");
 const Post = require("../models/posts");
 const bcrypt = require("bcrypt");
 const { generateAdminToken } = require("../helpers/token");
+const mongoose = require("mongoose");
 
 exports.login = async (req, res) => {
   try {
@@ -54,8 +55,29 @@ exports.getPosts = async (req, res) => {
     const userPosts = await Post.find({ user: req.params.id })
       .populate("user", "first_name gender last_name picture username cover")
       .populate("comments.commentBy", "first_name last_name picture username");
-      res.status(200).json(userPosts)
+    res.status(200).json(userPosts);
   } catch (error) {
     return res.status(500).json({ message: error.message });
+  }
+};
+exports.deletePost = async (req, res) => {
+  try {
+    const deletePost = await Post.findByIdAndRemove(req.params.id);
+    res.status(200).json(deletePost);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+exports.deleteComment = async (req, res) => {
+  const { commentId } = req.body;
+  try {
+    const post = await Post.findByIdAndUpdate(req.params.id, {
+      $pull: {
+        comments: { _id: commentId },
+      },
+    });
+    res.json(post);
+  } catch (error) {
+    console.log(error);
   }
 };

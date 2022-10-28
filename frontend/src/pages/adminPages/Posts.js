@@ -1,22 +1,13 @@
 import PostsFolders from "../../adminComponents/postManagement/PostsFolders";
-import AdminHeader from "../../adminComponents/AdminHeader";
-import { Box } from "@mui/material";
-import AdminSideBar from "../../adminComponents/AdminSideBar";
+import { Grid } from "@mui/material";
 import ListFolders from "../../adminComponents/postManagement/ListPosts";
 
 export default function Posts({ type }) {
   return (
-    <Box
-      display={"flex"}
-      flexDirection={"row"}
-      height={"100vh"}
-      width={"100vw"}
-    >
-      <AdminSideBar />
-      <Box flexShrink={1} flexGrow={1}>
-        <AdminHeader />
+    <Grid container>
+      <Grid item sx={12}>
         {type === "grid" ? <PostsFolders /> : <ListFolders />}
-      </Box>
-    </Box>
+      </Grid>
+    </Grid>
   );
 }

@@ -2,7 +2,6 @@ import Moment from "react-moment";
 import "./style.scss";
 
 export default function Comment({ comment }) {
-  console.log(comment);
   return (
     <div className="comment">
       <img src={comment.commentBy.picture} alt="" className="comment_img" />

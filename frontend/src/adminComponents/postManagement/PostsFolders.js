@@ -18,10 +18,10 @@ export default function PostsFolders() {
   };
 
   return (
-    <Grid container>
+    <Grid container sx={{ maxHeight: "87vh", overflowX: "scroll" }}>
       {folder &&
         folder.map((f) => (
-          <Grid item xs={4} lg={3}>
+          <Grid item xs={6} md={4} lg={3}>
             <Link
               underline="none"
               sx={{
@@ -32,7 +32,9 @@ export default function PostsFolders() {
               }}
               href={`/admin/posts/${f._id}`}
             >
-              <FolderIcon sx={{ fontSize: 200, color: "#616161" }} />
+              <FolderIcon
+                sx={{ fontSize: { xs: 120, md: 200 }, color: "#616161" }}
+              />
               <Typography sx={{ color: "#616161", marginTop: -3 }}>
                 {f.first_name} {f.last_name}
               </Typography>

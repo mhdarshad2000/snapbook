@@ -5,19 +5,28 @@ import AdminLoggedInRouter from "../protectedRouters/AdminLoggedInRouter";
 import AdminNotLoggedInRouter from "../protectedRouters/AdminNotLoggedInRouter";
 import Users from "../pages/adminPages/Users";
 import Posts from "../pages/adminPages/Posts";
+import AdminSideBar from "../adminComponents/AdminSideBar";
+import { Box } from "@mui/material";
+import AdminHeader from "../adminComponents/AdminHeader"
 
 export default function AdminRouter() {
   return (
-    <Routes>
-      <Route element={<AdminNotLoggedInRouter />}>
-        <Route path="/" element={<AdminLogin />} />
-      </Route>
-      <Route element={<AdminLoggedInRouter />}>
-        <Route path="/home" element={<AdminHome />} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/posts" element={<Posts type="grid" />} />
-        <Route path="/posts/:userId" element={<Posts type="single" />} />
-      </Route>
-    </Routes>
+    <Box sx={{display:"flex"}}>
+      <AdminSideBar />
+      <Box sx={{width:"100%"}}>
+        <AdminHeader />
+        <Routes>
+          <Route element={<AdminNotLoggedInRouter />}>
+            <Route path="/" element={<AdminLogin />} />
+          </Route>
+          <Route element={<AdminLoggedInRouter />}>
+            <Route path="/home" element={<AdminHome />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/posts" element={<Posts type="grid" />} />
+            <Route path="/posts/:userId" element={<Posts type="single" />} />
+          </Route>
+        </Routes>
+      </Box>
+    </Box>
   );
 }

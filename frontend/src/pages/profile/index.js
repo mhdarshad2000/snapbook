@@ -154,7 +154,13 @@ export default function Profile({ setVisible }) {
                         return new Date(b.createdAt) - new Date(a.createdAt);
                       })
                       .map((post) => (
-                        <Post key={post._id} post={post} user={user} profile />
+                        <Post
+                          key={post._id}
+                          post={post}
+                          user={user}
+                          profile
+                          visitor={visitor}
+                        />
                       ))
                   ) : (
                     <div className="no_post">No Posts To Display</div>

@@ -51,8 +51,8 @@ export default function ShowUsers() {
     }
   };
   return (
-    <Paper xs={{ width: "100%" }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
+    <Paper sx={{ width: "100%", overflow: "hidden" }}>
+      <TableContainer sx={{ maxHeight: "86vh", maxWidth:"100vw", minWidth:"87vw" }}>
         <Table stickyHeader aria-aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -73,7 +73,7 @@ export default function ShowUsers() {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((user, i) => (
                 <TableRow>
-                  <TableCell>{rowsPerPage+i + 1}</TableCell>
+                  <TableCell>{rowsPerPage*page + i + 1}</TableCell>
                   <TableCell>
                     <Avatar alt={user.username} src={user.picture} />
                   </TableCell>
@@ -123,7 +123,6 @@ export default function ShowUsers() {
               ))}
           </TableBody>
         </Table>
-      </TableContainer>
       <TablePagination
         rowsPerPageOptions={[10, 15, 25]}
         component="div"
@@ -133,6 +132,8 @@ export default function ShowUsers() {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
+      </TableContainer>
+
     </Paper>
   );
 }

@@ -21,6 +21,7 @@ export default function Post({ post, user, profile }) {
   const [count, setCount] = useState(1);
   const [displayComment, setDisplayComment] = useState(false);
   const [menuItems, setMenuItems] = useState(false);
+
   useEffect(() => {
     setComments(post?.comments);
   }, [post]);
@@ -39,6 +40,7 @@ export default function Post({ post, user, profile }) {
     setTotal(res.total);
     setCheckSaved(res.checkSaved);
   };
+  const postedUser = user.id === post.user._id;
 
   const reactHandler = (type) => {
     reactPost(post._id, type, user.token);
@@ -72,6 +74,7 @@ export default function Post({ post, user, profile }) {
     }
   };
   const postRef = useRef(null);
+
   return (
     <div
       className="post"
@@ -115,19 +118,23 @@ export default function Post({ post, user, profile }) {
           >
             <i className={`save_icon ${checkSaved && "invert"}`}></i>
           </div>
+
           <div className="small_circle" onClick={() => setMenuItems(true)}>
             <HiOutlineDotsVertical />
           </div>
         </div>
       </div>
-      {menuItems && (
-        <DeletePost
-          setMenuItems={setMenuItems}
-          postId={post._id}
-          token={user.token}
-          postRef={postRef}
-        />
-      )}
+      {menuItems &&
+        (postedUser ? (
+          <DeletePost
+            setMenuItems={setMenuItems}
+            postId={post._id}
+            token={user.token}
+            postRef={postRef}
+          />
+        ) : (
+          ""
+        ))}
       {post.background ? (
         <div
           className="post_bg"
