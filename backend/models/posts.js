@@ -23,6 +23,7 @@ const postSchema = new mongoose.Schema(
     background: {
       type: String,
     },
+    
     comments: [
       {
         comment: {

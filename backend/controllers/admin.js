@@ -3,7 +3,7 @@ const User = require("../models/user");
 const Post = require("../models/posts");
 const bcrypt = require("bcrypt");
 const { generateAdminToken } = require("../helpers/token");
-const mongoose = require("mongoose");
+const Report = require("../models/reports");
 
 exports.login = async (req, res) => {
   try {
@@ -79,5 +79,39 @@ exports.deleteComment = async (req, res) => {
     res.json(post);
   } catch (error) {
     console.log(error);
+  }
+};
+
+// exports.getReportPost = async (req, res) => {
+//   const reports = await Post.find()
+//     .populate("reports.reportedBy", "first_name last_name picture")
+//     .select("reports");
+
+//   const out = reports.filter((report) => report.reports.length > 0);
+//   res.json(out);
+// };
+
+exports.getReportPost = async (req, res) => {
+  try {
+    const reports = await Report.find({})
+      .populate("post")
+      .populate("reportedBy", "first_name last_name");
+    const a = reports.map(async (report) => {
+      return await report.populate("post.user", "first_name last_name picture");
+    });
+    Promise.all(a).then((resp) => {
+      res.json(resp);
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+exports.reportPost = async (req, res) => {
+  try {
+    await Post.findByIdAndRemove(req.body.postId);
+    await Report.deleteMany({ post: req.body.postId });
+    res.json({ status: "ok" });
+  } catch (error) {
+    console.log(error.message);
   }
 };

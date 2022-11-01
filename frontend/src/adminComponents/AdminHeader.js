@@ -1,10 +1,12 @@
-import { Box, Grid, Link, Button, Menu, MenuItem } from "@mui/material";
+import { Grid, Link, Button, Menu, MenuItem } from "@mui/material";
+
 import DehazeIcon from "@mui/icons-material/Dehaze";
 import Cookies from "js-cookie";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 
 export default function AdminHeader() {
   const navigate = useNavigate();
@@ -23,6 +25,7 @@ export default function AdminHeader() {
     navigate("/admin");
     handleClose();
   };
+
   return (
     <Grid
       container
@@ -50,7 +53,14 @@ export default function AdminHeader() {
           Snapbook Admin
         </Link>
       </Grid>
-      <Grid item xs={2} sx={{ display: "flex", justifyContent: "center" }}>
+      <Grid
+        item
+        xs={2}
+        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      >
+        <Link href="/admin/notification">
+          <NotificationsIcon sx={{ color: "white" }} />
+        </Link>
         <Button
           id="basic-button"
           aria-controls={open ? "basic-menu" : undefined}

@@ -10,6 +10,7 @@ import { reactPost } from "../../functions/posts";
 import Comment from "./Comment";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import DeletePost from "./DeletePost";
+import Report from "./Report";
 
 export default function Post({ post, user, profile }) {
   const [visible, setVisible] = useState(false);
@@ -133,7 +134,11 @@ export default function Post({ post, user, profile }) {
             postRef={postRef}
           />
         ) : (
-          ""
+          <Report
+            postId={post._id}
+            token={user.token}
+            setMenuItems={setMenuItems}
+          />
         ))}
       {post.background ? (
         <div
@@ -291,7 +296,16 @@ export default function Post({ post, user, profile }) {
                   return new Date(b.commentAt) - new Date(a.commentAt);
                 })
                 .slice(0, count)
-                .map((comment, i) => <Comment comment={comment} key={i} />)}
+                .map((comment, i) => (
+                  <Comment
+                    user={user}
+                    comments={comments}
+                    setComments={setComments}
+                    postId={post._id}
+                    comment={comment}
+                    key={i}
+                  />
+                ))}
             {count < comments.length && (
               <div className="view_comments" onClick={() => showMore()}>
                 Load more comments...

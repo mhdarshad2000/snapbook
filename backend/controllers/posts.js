@@ -1,5 +1,6 @@
 const Post = require("../models/posts");
 const User = require("../models/user");
+const Report = require("../models/reports");
 
 exports.createPost = async (req, res) => {
   try {
@@ -99,6 +100,43 @@ exports.deletePost = async (req, res) => {
   try {
     await Post.findByIdAndRemove(req.params.id);
     return res.status(200).json({ status: "ok" });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+exports.reportPost = async (req, res) => {
+  try {
+    const report = await new Report({
+      post: req.params.id,
+      reason: req.body.item,
+      reportedBy: req.user.id,
+    }).save();
+    res.status(200).json({ status: "ok" });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+exports.deleteComment = async (req, res) => {
+  try {
+    await Post.findByIdAndUpdate(req.body.postId, {
+      $pull: { comments: { _id: req.params.id } },
+    });
+    res.json({ status: "ok" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+exports.reportComment = async (req, res) => {
+  try {
+    const report = await new Report({
+      comment: req.params.id,
+      reason: req.body.item,
+      reportedBy: req.user.id,
+    }).save;
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
