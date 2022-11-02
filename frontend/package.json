@@ -18,6 +18,7 @@
     "react-dom": "^18.2.0",
     "react-easy-crop": "^4.5.1",
     "react-icons": "^4.6.0",
+    "react-insta-stories": "^2.4.2",
     "react-moment": "^1.1.2",
     "react-pro-sidebar": "^1.0.0-alpha.6",
     "react-redux": "^8.0.2",

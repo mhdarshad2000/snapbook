@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "../../component/header/Header";
 import LeftHome from "../../component/home/left/LeftHome";
-import Story from "../../component/home/stories/Story";
 import CreatePost from "../../component/home/createPosts/CreatePost";
 import ActivateForm from "./ActivateForm";
 import { useParams } from "react-router-dom";
@@ -70,7 +69,6 @@ export default function Activate() {
       )}
       <Header />
       <div className="home_middle">
-        <Story />
         <CreatePost user={user} />
       </div>
       <LeftHome user={user} />

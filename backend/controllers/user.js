@@ -88,6 +88,7 @@ exports.register = async (req, res) => {
       token: token,
       verified: user.verified,
       friends: user.friends,
+      isBlocked: user.isBlocked,
       message: "Register Success ! please activate your email to start",
     });
   } catch (error) {
@@ -134,6 +135,11 @@ exports.login = async (req, res) => {
     if (!check) {
       return res.status(400).json({ message: "Invalid Credentials enterred" });
     }
+    if (user.isBlocked) {
+      return res
+        .status(400)
+        .json({ message: "The is user is blocked by the admin" });
+    }
     const token = generateToken({ id: user._id.toString() }, "7d");
     res.send({
       id: user._id,
@@ -144,6 +150,8 @@ exports.login = async (req, res) => {
       token: token,
       verified: user.verified,
       friends: user.friends,
+      isBlocked: user.isBlocked,
+      stories: user.stories,
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });

@@ -132,28 +132,35 @@ export const addToSearchHistory = async (searchUser, token) => {
     return error.response.data.message;
   }
 };
-export const getSearchHistory = async ( token) => {
+export const getSearchHistory = async (token) => {
   try {
-    const { data } = await Axios.get(
-      "/getSearchHistory",
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+    const { data } = await Axios.get("/getSearchHistory", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     return data;
   } catch (error) {
     return error.response.data.message;
   }
 };
-export const getFriendsPageInfos = async ( token) => {
+export const getFriendsPageInfos = async (token) => {
   try {
-    const { data } = await Axios.get(
-      "/getFriendsPageInfos",
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
+    const { data } = await Axios.get("/getFriendsPageInfos", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return { status: "ok", data };
+  } catch (error) {
+    return error.response.data.message;
+  }
+};
+
+export const updateStory = async (token, url) => {
+  try {
+    const { data } = await Axios.put(
+      "/updateStory",
+      { url },
+      { headers: { Authorization: `Bearer ${token}` } }
     );
-    return {status:"ok",data};
+    return data;
   } catch (error) {
     return error.response.data.message;
   }

@@ -1,4 +1,5 @@
 const express = require("express");
+const { postStory } = require("../controllers/story");
 const {
   register,
   activateAccount,
@@ -44,5 +45,7 @@ router.get("/getSearchHistory", authUser, getSearchHistory);
 router.get("/getUser/:id", authUser, getUser);
 router.get("/getFriends", authUser, getFriends);
 router.get("/getFriendsPageInfos", authUser, getFriendsPageInfos);
+
+
 
 module.exports = router;

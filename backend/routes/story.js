@@ -1,9 +1,10 @@
 const express = require("express");
-const { postStory } = require("../controllers/story");
+const { postStory, getStories } = require("../controllers/story");
 const { authUser } = require("../middlewares/auth");
 
 const router = express.Router();
 
-router.post("/addStory", authUser, postStory);
+router.put("/updateStory", authUser, postStory);
+router.get("/getStories", authUser, getStories);
 
 module.exports = router;
