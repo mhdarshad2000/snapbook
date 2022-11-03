@@ -141,3 +141,20 @@ exports.reportComment = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+exports.savedPosts = async (req, res) => {
+  try {
+    const savedPost = await User.findById(req.user.id)
+      .select("savedPosts")
+      .populate("savedPosts.post");
+    const saved = savedPost.savedPosts.map(async (saved) => {
+      return await saved.post.populate(
+        "user",
+        "picture username first_name last_name"
+      );
+    });
+    Promise.all(saved).then((resp) => res.json(resp));
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};

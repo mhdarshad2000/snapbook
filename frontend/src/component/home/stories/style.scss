@@ -37,3 +37,10 @@
     align-items: center;
     margin-top: 125px;
 }
+.add_story{
+    z-index: 99;
+}
+.share_story{
+    display: flex;
+    flex-direction: column;
+}

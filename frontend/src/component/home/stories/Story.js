@@ -1,9 +1,8 @@
-import { Avatar, Grid } from "@mui/material";
-import { StoryRound } from "../../../styledComponent/styled";
+import { Avatar, Grid,Box } from "@mui/material";
+import { FocusedText, StoryRound } from "../../../styledComponent/styled";
 import AddIcon from "@mui/icons-material/Add";
 import { useEffect, useState } from "react";
 import AddStory from "./AddStory";
-import { Box } from "@mui/system";
 import { useSelector } from "react-redux";
 import { Axios } from "../../../helpers/Axios";
 import ShowStory from "./ShowStory";
@@ -32,25 +31,45 @@ export default function Story() {
       <Grid container>
         <Grid item xs={12}>
           <Box sx={{ display: "flex", gap: "5px" }}>
-            <StoryRound onClick={() => setStory(true)}>
-              <AddIcon sx={{ color: "gray", fontSize: "50px" }} />
+            <StoryRound>
+              <Avatar
+                src={user.picture}
+                sx={{
+                  width: "103px",
+                  height: "103px",
+                  objectFit: "cover",
+                }}
+                onClick={() => {
+                  setStory(true);
+                }}
+              />
             </StoryRound>
             {stories.length
               ? stories.map((story, i) => (
-                  <StoryRound border={"3px solid #16a112"} key={i}>
-                    <Avatar
-                      src={story.picture}
-                      sx={{
-                        width: "103px",
-                        height: "103px",
-                        objectFit: "cover",
-                      }}
-                      onClick={() => {
-                        setShowStory(true);
-                        setSingleStory(story);
-                      }}
-                    />
-                  </StoryRound>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <StoryRound border={"3px solid #16a112"} key={i}>
+                      <Avatar
+                        src={story[0].user.picture}
+                        sx={{
+                          width: "103px",
+                          height: "103px",
+                          objectFit: "cover",
+                        }}
+                        onClick={() => {
+                          setShowStory(true);
+                          setSingleStory(story);
+                        }}
+                      />
+                    </StoryRound>
+                    <FocusedText m={"-10px 0 5px 0"} >{story[0].user.first_name} {story[0].user.last_name}</FocusedText>
+                  </Box>
                 ))
               : ""}
           </Box>

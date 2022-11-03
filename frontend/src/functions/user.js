@@ -153,11 +153,11 @@ export const getFriendsPageInfos = async (token) => {
   }
 };
 
-export const updateStory = async (token, url) => {
+export const updateStory = async (token, url, text) => {
   try {
-    const { data } = await Axios.put(
+    const { data } = await Axios.post(
       "/updateStory",
-      { url },
+      { url, text },
       { headers: { Authorization: `Bearer ${token}` } }
     );
     return data;

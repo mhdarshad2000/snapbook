@@ -73,24 +73,7 @@ const userSchema = mongoose.Schema(
         ref: "User",
       },
     ],
-    stories: [
-      {
-        image: {
-          type: String,
-        },
-        text: {
-          type: String,
-        },
-        createdAt: {
-          type: Date,
-          expires: 86400,
-        },
-        viewed:{
-          type:Boolean,
-          default:false
-        }
-      },
-    ],
+
     requests: [
       {
         type: ObjectId,

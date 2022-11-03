@@ -1,17 +1,44 @@
-import { Alert, Box, Button, List, ListItem } from "@mui/material";
-import { useRef, useState } from "react";
+import {
+  Alert,
+  Box,
+  Button,
+  Divider,
+  List,
+  ListItemButton,
+} from "@mui/material";
+import { useEffect, useRef, useState } from "react";
 import { Boxe, FocusedText } from "../../../styledComponent/styled";
 import "./style.scss";
 import SendIcon from "@mui/icons-material/Send";
 import { uploadImages } from "../../../functions/uploadImages";
 import { updateStory } from "../../../functions/user";
 import { MoonLoader } from "react-spinners";
+import ShowUserOptions from "./ShowUserOptions";
+import { Axios } from "../../../helpers/Axios";
 
 export default function AddStory({ user, setStory }) {
   const [image, setImage] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [myStories, setMyStories] = useState([]);
+  const [userOptions, setUserOptions] = useState(false);
   const imgRef = useRef(null);
+  const listRef = useRef(null);
+
+  useEffect(() => {
+    stories();
+  }, []);
+  const stories = async () => {
+    try {
+      const { data } = await Axios.get("/getMyStory", {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
+      setMyStories(data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   const handleImage = (e) => {
     let file = e.target.files[0];
     if (
@@ -53,9 +80,9 @@ export default function AddStory({ user, setStory }) {
       console.log(error.message);
     }
   };
-
+  console.log(myStories);
   return (
-    <Box>
+    <Box sx={{ backgroundColor: "white" }}>
       <Boxe
         width={"fit-content"}
         padding={"none"}
@@ -65,6 +92,7 @@ export default function AddStory({ user, setStory }) {
         position={"relative"}
         bottom={"25px"}
         left={"90px"}
+        className="white"
       >
         {error ? (
           <Alert severity="error" color="warning">
@@ -81,17 +109,25 @@ export default function AddStory({ user, setStory }) {
         ) : (
           ""
         )}
-
-        <ListItem sx={{ cursor: "pointer" }}>
-          <List onClick={() => imgRef.current.click()}>Image</List>
-          <input
-            type="file"
-            ref={imgRef}
-            hidden
-            onChange={handleImage}
-            accept="image/jpg,image/jpeg,image/png,image/webp"
-          />
-        </ListItem>
+        <List
+          sx={{ backgroundColor: "white", borderRadius: "5px" }}
+          ref={listRef}
+        >
+          <ListItemButton onClick={() => setUserOptions(true)}>
+            view Story
+          </ListItemButton>
+          <Divider />
+          <ListItemButton onClick={() => imgRef.current.click()}>
+            Post Images
+          </ListItemButton>
+        </List>
+        <input
+          type="file"
+          ref={imgRef}
+          hidden
+          onChange={handleImage}
+          accept="image/jpg,image/jpeg,image/png,image/webp"
+        />
       </Boxe>
       {image ? (
         <Box className="blur">
@@ -132,6 +168,13 @@ export default function AddStory({ user, setStory }) {
         </Box>
       ) : (
         ""
+      )}
+      {userOptions && (
+        <ShowUserOptions
+          user={user}
+          setUserOptions={setUserOptions}
+          setStory={setStory}
+        />
       )}
     </Box>
   );

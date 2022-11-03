@@ -18,6 +18,7 @@ export default function LeftHome({ user }) {
           img={link.img}
           text={link.text}
           notification={link.notification}
+          link={link.link}
         />
       ))}
     </div>

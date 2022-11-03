@@ -7,6 +7,7 @@ import LeftHome from "../../component/home/left/LeftHome";
 import CreatePost from "../../component/home/createPosts/CreatePost";
 import SendVerification from "../../component/home/sendVerification/SendVerification";
 import Post from "../../component/posts/posts";
+import SavedPost from "../savedPost/SavedPost";
 
 export default function Home({ setVisible, posts, loading }) {
   const { user } = useSelector((user) => ({ ...user }));
@@ -30,7 +31,7 @@ export default function Home({ setVisible, posts, loading }) {
             ))}
         </div>
       </div>
-      {/* <LeftHome user={user} /> */}
+      <LeftHome user={user} />
     </div>
   );
 }

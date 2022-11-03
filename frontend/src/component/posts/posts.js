@@ -12,7 +12,7 @@ import { HiOutlineDotsVertical } from "react-icons/hi";
 import DeletePost from "./DeletePost";
 import Report from "./Report";
 
-export default function Post({ post, user, profile }) {
+export default function Post({ post, user, profile, setFilterPost }) {
   const [visible, setVisible] = useState(false);
   const [reacts, setReacts] = useState();
   const [check, setCheck] = useState();
@@ -41,7 +41,7 @@ export default function Post({ post, user, profile }) {
     setTotal(res.total);
     setCheckSaved(res.checkSaved);
   };
-  const postedUser = user.id === post.user._id;
+  const postedUser = user.id === post?.user?._id;
 
   const reactHandler = (type) => {
     reactPost(post._id, type, user.token);
@@ -70,6 +70,7 @@ export default function Post({ post, user, profile }) {
     await savePost({ postId: post._id, token: user.token });
     if (checkSaved) {
       setCheckSaved(false);
+      setFilterPost((prev) => !prev);
     } else {
       setCheckSaved(true);
     }
@@ -84,13 +85,13 @@ export default function Post({ post, user, profile }) {
     >
       <div className="post_header">
         <Link
-          to={`/profile/${post.user.username}`}
+          to={`/profile/${post?.user?.username}`}
           className="post_header_left"
         >
-          <img src={post.user.picture} alt="" />
+          <img src={post?.user?.picture} alt="" />
           <div className="header_col">
             <div className="post_profile_name">
-              {post.user.first_name} {post.user.last_name}
+              {post?.user?.first_name} {post?.user?.last_name}
               <div className="updated_p">
                 {post.type === "profilePicture" &&
                   `updated ${

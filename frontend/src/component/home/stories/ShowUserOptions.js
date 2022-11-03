@@ -1,20 +1,21 @@
-import { Box } from "@mui/material";
+import React from "react";
 import Stories from "react-insta-stories";
 import Moment from "react-moment";
+import { Box } from "@mui/material";
 const stories = [];
 
-export default function ShowStory({ story, setShowStory }) {
-  story.map((storyList) => {
-    console.log(storyList);
+export default function ShowUserOptions({ user, setUserOptions, setStory }) {
+  user.stories.map((storyList) => {
     stories.push({
       url: storyList.image,
       header: {
-        heading: `${storyList.user.first_name} ${storyList.user.last_name}`,
+        heading: `${user.first_name} ${user.last_name}`,
         subheading: <Moment fromNow>{storyList.createdAt}</Moment>,
-        profileImage: `${storyList.user.picture}`,
+        profileImage: `${user.picture}`,
       },
     });
   });
+  console.log(user);
   return (
     <Box className="blur">
       <Box className="story_view">
@@ -25,8 +26,8 @@ export default function ShowStory({ story, setShowStory }) {
           height={625}
           isPaused={true}
           onAllStoriesEnd={() => {
-            setShowStory(false);
-            stories.length = 0;
+            setUserOptions(false);
+            setStory(false);
           }}
         />
       </Box>

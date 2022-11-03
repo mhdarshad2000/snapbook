@@ -13,6 +13,7 @@ import { postsReducer } from "../functions/Reducers";
 import CreatePostPopup from "../component/home/createPostPopup/CreatePostPopup";
 import Messenger from "../pages/messenger/Messenger";
 import Friends from "../pages/friends/Friends";
+import SavedPost from "../pages/savedPost/SavedPost";
 
 export default function UserRouter() {
   const { user } = useSelector((state) => ({ ...state }));
@@ -64,6 +65,7 @@ export default function UserRouter() {
             element={<Profile setVisible={setVisible} />}
           />
           <Route path="/messenger" element={<Messenger />} />
+          <Route path="/savedPost" element={<SavedPost />} />
           <Route path="/friends" element={<Friends />} />
           <Route path="/friends/:type" element={<Friends />} />
           <Route path="/activate/:token" element={<Activate />} />
